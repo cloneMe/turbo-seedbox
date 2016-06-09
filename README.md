@@ -1,14 +1,15 @@
 # turbo-seedbox
 
-This project deploys a multi-users seedbox, using Docker. It will install docker automatically, if needed, and deploy following servers:
+This project deploys a **multi-users** seedbox, using Docker. It will install docker automatically, if needed, and deploy following servers:
 - rtorrent: to download torrent.
 - sickrage: Automatic Video Library Manager for TV Shows. It watches for new episodes of your favorite shows, and when they are posted it does its magic.
 - couchpotato: same thing but for films.
 - plex: to stream videos from your server.
-- openVPN: a VPN server.
-- teamspeak server.
+- a VPN server: openVPN.
+- a teamspeak server.
 - a FTP server, a file manager (https://github.com/simogeo/Filemanager), ...
 - WARNING: By default, fail2ban is deployed to protect the host. You have only one try to connect using SSH. If you enter an incorrect password, you will be ban during 1 hour. See include/fail2ban.
+
 
 ## 0. Download sources
 ### 0.1 Install Docker
@@ -25,7 +26,7 @@ cd turbo-seedbox
 chmod +x build.sh
 ```
 
-## 1. Configure following files
+## 1. Configuration
 ### 1.1 Create your users
 Run the following command to create an user:
 ```bash
