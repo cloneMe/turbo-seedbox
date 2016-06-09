@@ -1,0 +1,35 @@
+#!/bin/bash
+# -----------------------------------------------------------------------------
+# docker-teamspeak /start script
+#
+# Authors: Isaac Bythewood
+# Updated: Jan 25th, 2014
+# -----------------------------------------------------------------------------
+
+mkdir -p /config/teamspeak3
+mkdir -p /config/teamspeak3/logs
+
+# Checking if files exist to make sure we're backing up the database to data
+if [ ! -f /opt/teamspeak/ts3server.sqlitedb ] && [ -f /config/teamspeak3/ts3server.sqlitedb ]
+then
+    ln -s /config/teamspeak3/ts3server.sqlitedb /opt/teamspeak/ts3server.sqlitedb
+fi
+
+if [ -f /opt/teamspeak/ts3server.sqlitedb ] && [ ! -f /config/teamspeak3/ts3server.sqlitedb ]
+then
+    mv /opt/teamspeak/ts3server.sqlitedb /config/teamspeak3/ts3server.sqlitedb
+    ln -s /config/teamspeak3/ts3server.sqlitedb /opt/teamspeak/ts3server.sqlitedb
+fi
+
+if [ -f /opt/teamspeak/ts3server.sqlitedb ] && [ -f /config/teamspeak3/ts3server.sqlitedb ]
+then
+    rm /opt/teamspeak/ts3server.sqlitedb
+    ln -s /config/teamspeak3/ts3server.sqlitedb /opt/teamspeak/ts3server.sqlitedb
+fi
+
+
+# Run the teamspeak server
+export LD_LIBRARY_PATH=/opt/teamspeak
+cd /opt/teamspeak
+./ts3server logpath=/config/teamspeak3/logs/
+

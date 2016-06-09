@@ -1,0 +1,111 @@
+#!/bin/bash
+#
+### BEGIN INIT INFO
+# Provides:          sickrage_xataz
+# Required-Start:    $local_fs $network $remote_fs
+# Required-Stop:     $local_fs $network $remote_fs
+# Should-Start:      $NetworkManager
+# Should-Stop:       $NetworkManager
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Daemon pour sickbeard
+# Description:       Permets le lancement de sickbeard en multi-utilisateurs
+### END INIT INFO
+
+# A modifier
+SR_USER=#user#
+SR_INSTALL=/opt/sickrage
+
+
+
+# Pas touche
+NAME=sickbeard_$SR_USER
+DESC="SickBeard pour $SR_USER"
+SR_HOME=$SR_INSTALL
+SR_DATA=/config/sickrage/$SR_USER
+SR_OPTS=--config=$SR_DATA/config.ini
+SR_PIDFILE=$SR_DATA/sickrage.pid
+
+
+# default
+RUN_AS=${SR_USER}
+APP_PATH=${SR_HOME-/opt/sickrage}
+DATA_DIR=${SR_DATA-/opt/sickrage}
+PID_FILE=${SR_PIDFILE-/var/run/sickrage/sickrage.pid}
+DAEMON=${PYTHON_BIN-/usr/bin/python}
+EXTRA_DAEMON_OPTS=${SR_OPTS-}
+EXTRA_SSD_OPTS=${SSD_OPTS-}
+
+PID_PATH=`dirname $PID_FILE`
+DAEMON_OPTS=" SickBeard.py -q --daemon --nolaunch --pidfile=${PID_FILE} --datadir=${DATA_DIR} ${EXTRA_DAEMON_OPTS}"
+
+test -x $DAEMON || exit 0
+set -e
+
+if [ ! -d $PID_PATH ]; then
+    mkdir -p $PID_PATH
+    chown $RUN_AS $PID_PATH
+fi
+
+if [ ! -d $DATA_DIR ]; then
+    mkdir -p $DATA_DIR
+    chown $RUN_AS $DATA_DIR
+fi
+
+if [ -e $PID_FILE ]; then
+    PID=`cat $PID_FILE`
+    if ! kill -0 $PID > /dev/null 2>&1; then
+        echo "Removing stale $PID_FILE"
+        rm $PID_FILE
+    fi
+fi
+
+d_start() {
+    echo "Starting $DESC"
+    start-stop-daemon -d $APP_PATH -c $RUN_AS $EXTRA_SSD_OPTS --start --pidfile $PID_FILE --exec $DAEMON -- $DAEMON_OPTS
+}
+
+d_stop() {
+    echo "Stopping $DESC"
+    start-stop-daemon --stop --pidfile $PID_FILE --retry 15
+}
+
+d_status() {
+        if [ -e $PID_FILE ]
+        then
+                if [ $(cat $PID_FILE) -eq $(ps -ef | grep $PID_FILE | grep -v grep | awk '{print $2}') ]
+                then
+                        echo "$DESC is running"
+                else
+                        echo "$DESC is stopping"
+                fi
+        else
+                echo "$DESC is stopping"
+        fi
+
+}
+
+case "$1" in
+    start)
+        d_start
+        ;;
+    stop)
+        d_stop
+        ;;
+
+    restart|force-reload)
+        d_stop
+        sleep 2
+        d_start
+        ;;
+    status)
+        d_status
+        ;;
+    *)
+        N=/etc/init.d/$NAME
+        echo "Usage: $N {start|stop|restart|status|force-reload}" >&2
+        exit 1
+        ;;
+esac
+
+exit 0

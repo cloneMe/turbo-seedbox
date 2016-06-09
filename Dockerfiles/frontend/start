@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+
+
+# Replace common.conf with default
+cp -f /etc/nginx/common_default.conf /etc/nginx/common.conf
+
+if $USE_SSL ; then
+  
+  if [[ -f /etc/nginx/ssl/dhparams.pem ]]; then
+    sed -e 's/nginx.crt/fullchain.pem/g' -e 's/nginx.key/privkey.pem/g' -e 's/#ssl_dhparam/ssl_dhparam/g'  /etc/nginx/ssl.conf > /etc/nginx/sslPerm.conf
+    echo "include sslPerm.conf;" >> /etc/nginx/common.conf
+  elif [[ -f /etc/nginx/ssl/nginx.crt && -f /etc/nginx/ssl/nginx.key ]]; then
+    echo "include ssl.conf;" >> /etc/nginx/common.conf
+  fi
+fi
+
+nginx -g "daemon off;"

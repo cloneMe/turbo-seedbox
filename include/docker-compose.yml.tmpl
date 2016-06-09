@@ -1,0 +1,172 @@
+version: '2'
+services:
+ frontend:
+    image: kelvinchen/seedbox:frontend2
+    container_name: seedboxdocker_front_1
+    restart: always
+    networks: 
+      - seedbox
+    environment:
+        - server_name=#server_name#
+        - USE_SSL=#useSSL#
+        - TZ=#TZ#
+#frontend_dependencies#
+    ports:
+        - "80:80"
+        - "443:443"
+    volumes:
+        - #pwd#/ssl:/etc/nginx/ssl/:ro
+        - #seedboxFolder#/config:/config
+        - #pwd#/htpasswd.txt:/etc/nginx/.htpasswd:ro
+        - #pwd#/nginx.conf:/etc/nginx/nginx.conf:ro
+        - #seedboxFolder#/log/nginx-front:/var/log/nginx
+ rtorrent:
+    image: nilteam/rtorrent2:latest
+    container_name: seedboxdocker_rtorrent_1
+    restart: always
+    networks: 
+      - seedbox
+    # On ne litmite pas rTorrent vu que c'est le process "principal" de la machine
+    # mem_limit: 2000m
+    # memswap_limit: 1000m
+    environment:
+        - VIRTUAL_HOST=rtorrent
+        - USE_SSL=#useSSL#
+        - TZ=#TZ#
+    ports:
+        - "49160-49175:49160-49175"
+        - "49161-49175:49161-49175/udp"
+    volumes:
+        - #pwd#/htpasswd.txt:/.htpasswd:ro
+        - #pwd#/ssl:/etc/nginx/ssl:ro
+        - #seedboxFolder#/config:/config
+        - #seedboxFolder#/log/:/log
+        - #seedboxFolder#/downloads/:/downloads
+#The authentification is done by the container.
+        - #seedboxFolder#/log/nginx-torrent:/var/log/nginx
+#rtorrent_end#
+ fail2ban:
+    image: francois/fail2ban:latest
+    container_name: seedboxdocker_fail2ban
+    restart: always
+    privileged: true
+    network_mode: "host"
+    environment:
+        - TIMEZONE=Europe/Paris
+    volumes:
+        - #pwd#/include/fail2ban/jail.txt:/etc/fail2ban/jail.local:ro
+        - #pwd#/include/fail2ban/nginx-http-auth.conf:/etc/fail2ban/filter.d/nginx-http-auth.conf:ro
+        - #pwd#/include/fail2ban/nginx-badbots.conf:/etc/fail2ban/filter.d/nginx-badbots.conf:ro
+        - #seedboxFolder#/log:/var/log/
+        - /var/log:/host
+#fail2ban_end#
+
+ sickrage:
+    image: kelvinchen/seedbox:sickrage2
+    container_name: seedboxdocker_sickrage
+    restart: always
+    networks: 
+      - seedbox
+    mem_limit: 300m
+    memswap_limit: 500m
+    volumes:
+        - #pwd#/htpasswd.txt:/etc/nginx/.htpasswd:ro
+        - #seedboxFolder#/config/sickrage:/config
+        - #seedboxFolder#/downloads/:/torrents
+#sickrage_end#
+
+ plex:
+    image: timhaak/plex
+    container_name: seedboxdocker_plex_1
+    restart: always
+    networks: 
+      - seedbox
+    mem_limit: 2000m
+    memswap_limit: 2000m
+    ports:
+        - "32400:32400"
+    environment:
+        - VIRTUAL_HOST=plex.dock
+    volumes:
+#Some users have the folliwing issue
+#Error: Unable to set up server: sqlite3_statement_backend::prepare: disk I/O error for SQL: PRAGMA cache_size=4000
+#uncomment the next line to test if it works on your side
+#plex_config#        - #seedboxFolder#/config/plex:/config
+        - #seedboxFolder#/downloads/:/data
+#plex_end#
+
+ #couckPotato_conf#
+
+ openvpn:
+    image: kelvinchen/seedbox:openvpn
+    container_name: seedboxdocker_openvpn_1
+    restart: always
+    networks: 
+      - seedbox
+    ports:
+        - "1194:1194/udp"
+    volumes:
+        - #seedboxFolder#/config:/config
+        - #seedboxFolder#/downloads:/torrents
+    cap_add:
+        - NET_ADMIN
+#openvpn_end#
+
+ teamspeak:
+   image: nilteam/teamspeak
+   container_name: seedboxdocker_teamspeak_1
+   restart: always
+   networks: 
+      - seedbox
+   mem_limit: 300m
+   memswap_limit: 500m
+   ports:
+       - "9987:9987/udp"
+       - "30033:30033"
+       - "10011:10011"
+   volumes:
+       - #seedboxFolder#/config:/config
+#teamspeak_end#
+
+ explorer:
+   image: nilteam/explorer
+   container_name: seedboxdocker_explorer_1
+   restart: always
+   networks: 
+      - seedbox
+   volumes:
+       - #seedboxFolder#/config/explorer:/opt/explorer
+       - #seedboxFolder#/downloads:/torrents
+#explorer_end#
+
+ filemanager:
+    image: nilteam/filemanager2
+    container_name: seedboxdocker_filemanager_1
+    restart: always
+    networks: 
+      - seedbox
+    volumes:
+        - #seedboxFolder#/downloads:/downloads
+#The authentification is done on front side.
+#filemanager_end#
+
+ pureftpd:
+    image: nilteam/pureftpd
+    container_name: seedboxdocker_pureftpd_1
+    restart: always
+    networks: 
+      - seedbox
+    ports:
+        - "21:21"
+        - "30000-30009:30000-30009"
+    volumes:
+        - #pwd#/htpasswd.txt:/etc/nginx/.htpasswd:ro
+        - #seedboxFolder#/downloads:/downloads
+    environment:
+        - PUBLICHOST=#server_name#
+        - TZ=#TZ#
+#pureftpd_end#
+
+networks:
+  seedbox:
+    driver: bridge

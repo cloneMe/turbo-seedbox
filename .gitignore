@@ -1,0 +1,10 @@
+docker-compose.yml
+/nginx.conf
+Dockerfiles/explorer
+Dockerfiles/filemanager/Filemanager-master.zip
+htpasswd.txt
+local.sh
+/ssl
+tmp
+
+

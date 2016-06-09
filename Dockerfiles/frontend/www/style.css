@@ -1,0 +1,36 @@
+body {
+    font-family: sans-serif;
+    padding: 50px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 72pt;
+}
+
+small {
+    font-style: italic;
+    font-size: 9pt;
+}
+
+input[type="checkbox"]{
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    background: #34495E;
+    border-radius: 1px;
+    box-sizing: border-box;
+    position: relative;
+    box-sizing: content-box ;
+    width: 100px;
+    height: 100px;
+    border-width: 0;
+    transition: all .3s linear;
+}
+input[type="checkbox"]:checked{
+    background-color: #2ECC71;
+}
+input[type="checkbox"]:focus{
+    outline: 0 none;
+    box-shadow: none;
+}

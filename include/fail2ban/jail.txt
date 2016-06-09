@@ -1,0 +1,46 @@
+[DEFAULT]
+ignoreip = 127.0.0.1/8
+bantime  = 3600
+findtime  = 3600
+maxretry = 3
+
+[ssh]
+enabled = true
+port    = ssh
+filter  = sshd
+logpath  = /host/auth.log
+maxretry = 1
+
+[nginx-dos]
+# Based on apache-badbots but a simple IP check (any IP requesting more than
+# 240 pages in 60 seconds, or 4p/s average, is suspicious)
+# Block for two full days.
+# @author Yannick Warnier
+enabled = true
+port    = http,https
+filter  = nginx-badbots
+logpath = /var/log/nginx*/access.log
+findtime = 60
+bantime  = 172800
+maxretry = 240
+
+[nginx-http-auth]
+
+enabled  = true
+filter   = nginx-http-auth
+port     = http,https
+logpath  = /var/log/nginx*/error.log
+
+# Pour vsftpd, il est dans le fichier donc vous modifiez juste false en true si besoin
+[vsftpd]
+
+enabled  = false
+port     = ftp,ftp-data,ftps,ftps-data
+filter   = vsftpd
+logpath  = /var/log/vsftpd.log
+banaction = iptables-multiport
+# or overwrite it in jails.local to be
+# logpath = /var/log/auth.log
+# if you want to rely on PAM failed login attempts
+# vsftpd's failregex should match both of those formats
+maxretry = 5
