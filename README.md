@@ -73,6 +73,32 @@ Otherwise, you need to declare each subdomain.
 * Delete all containers `docker rm $(docker ps -a -q)`
 * Delete all images `docker rmi $(docker images -q)`
 
+## 5. Server configuration
+### 5.1 Sickrage
+Open "Search Settings" and click on the "torrent search" tab.
+Choose "rtorrent" and put following values:
+- Search Settings: https://rtorrent.__your domain.com__/RPC**USER**, ex : https://rtorrent.domain.com/RPCCLONEME
+- Http auth : basic
+- Set userName & password
+- Download file location: /downloads/rtorrent/**user**/watch
+
+Open the "Post Processing" menu, activate it and set following values:
+- Processing Method: hard link
+
+When adding a a new serie, set /downloads/rtorrent/**user**/serie as the parent folder (step 2).
+
+### 5.2 Couchpotato
+It is not necessary to set username & password.
+Activate "rtorrent" and put following values:
+- Host: https://rtorrent.__your domain.com__, ex : https://rtorrent.domain.com
+- Rpc Url: /RPC**USER**, ex: /RPCCLONEME
+- Http auth : basic
+- Set userName & password
+- Download file location: /downloads/rtorrent/**user**/film
+
+### 5.3 Plex
+https://plex.__domain.com__/web/index.html
+
 # [For dev]
 - run  `cp build.sh local.sh` and work with local.sh
 - Edit your C:\Windows\System32\drivers\etc\hosts
