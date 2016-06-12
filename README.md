@@ -51,9 +51,8 @@ By default:
 ## 2. Run build.sh
 It will:
 - Install Docker if needed.
-- Build custom containers.
 - Generate docker-compose & nginx. These files depend on users in htpasswd.txt. If you add or remove an user, you have to launch ./build.sh again.
-To note: take a coffee or a beer ;) This step depends of your connection (you have to download 1.7G or 3G :/ ).
+
 
 ## 3. Configure your DNS
 Following subdomains are used: files, rtorrent, sickrage, couchpotato and explorer.
@@ -62,7 +61,7 @@ Otherwise, you need to declare each subdomain.
 
 ## 4. Launch servers
 
-* To start all servers: `docker-compose up -d`
+* To start all servers: `docker-compose up -d`. The first time, take a coffee or a beer ;) This step depends of your connection (you have to download 1.7G or 3G :/ ).
 * To see logs: `docker-compose logs`
 * To stop all servers: `docker-compose stop`
 * To stop all servers+: `docker stop $(docker ps -q)`
