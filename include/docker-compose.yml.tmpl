@@ -1,7 +1,7 @@
 version: '2'
 services:
  frontend:
-    image: kelvinchen/seedbox:frontend2
+    image: cloneme/nginx
     container_name: seedboxdocker_front_1
     restart: always
     networks: 
@@ -21,7 +21,7 @@ services:
         - #pwd#/nginx.conf:/etc/nginx/nginx.conf:ro
         - #seedboxFolder#/log/nginx-front:/var/log/nginx
  rtorrent:
-    image: nilteam/rtorrent2:latest
+    image: cloneme/rtorrent-rutorrent:64bit
     container_name: seedboxdocker_rtorrent_1
     restart: always
     networks: 
@@ -62,7 +62,7 @@ services:
 #fail2ban_end#
 
  sickrage:
-    image: kelvinchen/seedbox:sickrage2
+    image: cloneme/mu-sickrage
     container_name: seedboxdocker_sickrage
     restart: always
     networks: 
@@ -98,7 +98,7 @@ services:
  #couckPotato_conf#
 
  openvpn:
-    image: kelvinchen/seedbox:openvpn
+    image: kylemanna/openvpn
     container_name: seedboxdocker_openvpn_1
     restart: always
     networks: 
@@ -106,14 +106,13 @@ services:
     ports:
         - "1194:1194/udp"
     volumes:
-        - #seedboxFolder#/config:/config
-        - #seedboxFolder#/downloads:/torrents
+        - #seedboxFolder#/config/openvpn:/etc/openvpn
     cap_add:
         - NET_ADMIN
 #openvpn_end#
 
  teamspeak:
-   image: nilteam/teamspeak
+   image: devalx/docker-teamspeak3:latest
    container_name: seedboxdocker_teamspeak_1
    restart: always
    networks: 
@@ -125,11 +124,11 @@ services:
        - "30033:30033"
        - "10011:10011"
    volumes:
-       - #seedboxFolder#/config:/config
+       - #seedboxFolder#/config/ts3:/home/ts3/data
 #teamspeak_end#
 
  explorer:
-   image: nilteam/explorer
+   image: cloneme/explorer
    container_name: seedboxdocker_explorer_1
    restart: always
    networks: 
@@ -140,7 +139,7 @@ services:
 #explorer_end#
 
  filemanager:
-    image: nilteam/filemanager2
+    image: cloneme/filemanager
     container_name: seedboxdocker_filemanager_1
     restart: always
     networks: 
@@ -151,7 +150,7 @@ services:
 #filemanager_end#
 
  pureftpd:
-    image: nilteam/pureftpd
+    image: cloneme/pure-ftpd
     container_name: seedboxdocker_pureftpd_1
     restart: always
     networks: 

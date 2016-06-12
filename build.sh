@@ -3,9 +3,10 @@
 
 # run "docker-machine ip default" or set your domain name
 server_name=192.168.99.100
-# (Not yet implemented) letsEncrypt or self
+# (Not yet implemented) letsEncrypt or self or provided
 # letsEncrypt: Let's Encrypt is a free, automated, and open certificate authority brought to you
 # self: generate a self-signed certificate
+# provided: you have to provide following certificates: nginx.crt, nginx.key OR privkey.pem, fullchain.pem, dhparams.pem in the ssl generated folder.
 useHttps=false
 #for https
 EMAIL="seedbox@yopmail.com"
@@ -13,17 +14,23 @@ EMAIL="seedbox@yopmail.com"
 TZ="Europe/Paris"
 SUBDOMAINS="files,rtorrent,sickrage,couchpotato,plex,explorer"
 
-#SERVER
+############### SERVER
 # All servers with the property at true will be deployed.
 fail2ban=true
+# https://hub.docker.com/r/timhaak/plex/
 plex=true
 sickrage=true
 couchPotato=true
 rtorrent=true
+# https://hub.docker.com/r/kylemanna/openvpn/
 openvpn=f
+# https://hub.docker.com/r/devalx/docker-teamspeak3/
 teamspeak=f
+# https://hub.docker.com/r/stilliard/pure-ftpd/
 pureftpd=true
+# https://github.com/simogeo/Filemanager
 filemanager=true
+# see https://github.com/soyuka/explorer
 # enter : admin/admin then configure and update the home to /torrents
 explorer=f
 

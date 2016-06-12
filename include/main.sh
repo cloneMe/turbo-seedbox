@@ -27,43 +27,22 @@ if [ "$useHttps" = "self" ]; then
  if [ ! -f "ssl/nginx.key" ]; then
   self
  fi
+elif [ "$useHttps" = "letsEncrypt" ]; then
+ echo "letsEncrypt: not yet implemented."
+elif [ "$useHttps" = "provided" ]; then
+ if [[ -f "ssl/nginx.key" || -f "ssl/privkey.pem" ]]; then
+  useSSL="true"
+ else
+   echo "error: ssl/nginx.key or ssl/privkey.pem not found. Provide these files then run this script again."
+ fi
 fi
 
- docker build -t$mode kelvinchen/seedbox:base  Dockerfiles/base
- docker build -t$mode kelvinchen/seedbox:frontend2   Dockerfiles/frontend    &
-if [ "$rtorrent" = "true" ]; then
- docker build -t$mode nilteam/rtorrent2              Dockerfiles/rtorrent    &
-fi
-if [ "$sickrage" = "true" ]; then
- docker build -t$mode kelvinchen/seedbox:sickrage2   Dockerfiles/sickrage    &
-fi
-if [ "$couchPotato" = "true" ]; then
- docker build -t$mode nilteam/couchpotato           Dockerfiles/couchpotato &
-fi
-
-if [ "$pureftpd" = "true" ]; then
- docker build -t$mode nilteam/pureftpd           Dockerfiles/pureftpd &
-fi
 if [ "$openvpn" = "true" ]; then
- docker build -t$mode kelvinchen/seedbox:openvpn           Dockerfiles/openvpn &
-fi
-if [ "$teamspeak" = "true" ]; then
- docker build -t$mode nilteam/teamspeak           Dockerfiles/teamspeak &
+   OVPN_DATA = "$seedboxFiles/config/openvpn:/etc/openvpn"
+   docker run -v $OVPN_DATA --rm kylemanna/openvpn ovpn_genconfig -u udp://VPN.SERVERNAME.COM
+  docker run -v $OVPN_DATA --rm -it kylemanna/openvpn ovpn_initpki
 fi
 
-if [[ "$filemanager" = "true" && ! -f "Dockerfiles/filemanager/Filemanager-master.zip" ]]; then
-# download https://github.com/simogeo/Filemanager/archive/master.zip
-  if hash curl 2>/dev/null; then
-   curl  https://codeload.github.com/simogeo/Filemanager/zip/master > Dockerfiles/filemanager/Filemanager-master.zip
-  else
-   wget -O Dockerfiles/filemanager/Filemanager-master.zip https://codeload.github.com/simogeo/Filemanager/zip/master
-  fi
-  docker build -t nilteam/filemanager2           Dockerfiles/filemanager
-fi
-if [[ "$explorer" = "true" && ! -d "Dockerfiles/explorer" ]]; then
-  git clone --depth=1 https://github.com/soyuka/explorer.git Dockerfiles/explorer
-  docker build -t nilteam/explorer           Dockerfiles/explorer
-fi
 
 function addProxy_pass {
 local  result="$1"
@@ -75,7 +54,7 @@ echo "$result"
 function addCouchPotato {
 local  result="$1\n"
 result="$result couchPotato_$2:\n"
-result="$result    image: nilteam/couchpotato\n"
+result="$result    image: cloneme/couchpotato\n"
 result="$result    container_name: seedboxdocker_couchpotato_$2\n"
 result="$result    restart: always\n"
 result="$result    networks: \n"
