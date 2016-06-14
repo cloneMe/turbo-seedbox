@@ -2,6 +2,7 @@ version: '2'
 services:
  frontend:
     image: cloneme/nginx
+    #build: ../nginx
     container_name: seedboxdocker_front_1
     restart: always
     networks: 
@@ -22,6 +23,7 @@ services:
         - #seedboxFolder#/log/nginx-front:/var/log/nginx
  rtorrent:
     image: cloneme/rtorrent-rutorrent:64bit
+    #build: ../rtorrent-rutorrent
     container_name: seedboxdocker_rtorrent_1
     restart: always
     networks: 
@@ -46,7 +48,7 @@ services:
         - #seedboxFolder#/log/nginx-torrent:/var/log/nginx
 #rtorrent_end#
  fail2ban:
-    image: francois/fail2ban:latest
+    image: cloneme/fail2ban:latest
     container_name: seedboxdocker_fail2ban
     restart: always
     privileged: true
