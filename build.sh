@@ -23,6 +23,8 @@ sickrage=true
 couchPotato=true
 rtorrent=true
 # https://hub.docker.com/r/kylemanna/openvpn/
+# createVpnFor.sh will be generated automatically. 
+# Run './createVpnFor.sh foo' to create foo.ovpn
 openvpn=f
 # https://hub.docker.com/r/devalx/docker-teamspeak3/
 teamspeak=f

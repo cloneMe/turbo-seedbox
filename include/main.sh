@@ -37,10 +37,17 @@ elif [ "$useHttps" = "provided" ]; then
  fi
 fi
 
-if [ "$openvpn" = "true" ]; then
-   OVPN_DATA = "$seedboxFiles/config/openvpn:/etc/openvpn"
-   docker run -v $OVPN_DATA --rm kylemanna/openvpn ovpn_genconfig -u udp://VPN.SERVERNAME.COM
-  docker run -v $OVPN_DATA --rm -it kylemanna/openvpn ovpn_initpki
+if [[ "$openvpn" = "true" && ! -d "$seedboxFiles/config/openvpn" ]]; then
+   OVPN_DATA="$seedboxFiles/config/openvpn:/etc/openvpn"
+   docker run -v "$OVPN_DATA" --rm kylemanna/openvpn ovpn_genconfig -u udp://"$server_name"
+   docker run -v "$OVPN_DATA" --rm -it kylemanna/openvpn ovpn_initpki
+   echo "#!/bin/bash
+   # Generate a client certificate without a passphrase
+docker run -v $OVPN_DATA --rm -it kylemanna/openvpn easyrsa build-client-full \$1 nopass
+# Retrieve the client configuration with embedded certificates
+docker run -v $OVPN_DATA --rm kylemanna/openvpn ovpn_getclient \$1 > \$1.ovpn
+" > createVpnFor.sh 
+    chmod +x createVpnFor.sh
 fi
 
 
