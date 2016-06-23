@@ -7,4 +7,5 @@ local.sh
 /ssl
 tmp
 createVpnFor.sh
+*.ovpn
 
