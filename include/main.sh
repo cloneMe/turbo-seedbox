@@ -21,6 +21,9 @@ fi
 echo $seedboxFiles
 echo $here
 
+tmpFolder="$here/$INCLUDE/tmp"
+mkdir -p $tmpFolder
+
 useSSL="false"
 if [ "$useHttps" = "self" ]; then
  useSSL="true"
@@ -28,7 +31,10 @@ if [ "$useHttps" = "self" ]; then
   self
  fi
 elif [ "$useHttps" = "letsEncrypt" ]; then
- echo "letsEncrypt: not yet implemented."
+ letsencrypt
+ if [ -f "ssl/privkey.pem" ]; then
+  useSSL="true"
+ fi
 elif [ "$useHttps" = "provided" ]; then
  if [[ -f "ssl/nginx.key" || -f "ssl/privkey.pem" ]]; then
   useSSL="true"
@@ -148,7 +154,6 @@ sed -i 's|#frontend_dependencies#|'"$depends_on"'|g' docker-compose.yml
 # Fix : use /var/log in the fail2ban container
 if [ ! -f /var/log/auth.log ]; then
  # in case: if /var/log/auth.log does not exist, use a fake
- mkdir -p $here/include/tmp
- touch $here/include/tmp/auth.log
- sed -i 's|/var/log:/host|'"$here"'/include/tmp:/host|g' docker-compose.yml
+ touch $tmpFolder/auth.log
+ sed -i 's|/var/log:/host|'"$tmpFolder"':/host|g' docker-compose.yml
 fi
