@@ -12,6 +12,7 @@ useHttps=false
 EMAIL="seedbox@yopmail.com"
 #see http://php.net/manual/en/timezones.php
 TZ="Europe/Paris"
+#using letsEncrypt, delete subdomains not defined on DNS side
 SUBDOMAINS="files,rtorrent,sickrage,couchpotato,plex,explorer"
 
 ############### SERVER

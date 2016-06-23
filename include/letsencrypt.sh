@@ -31,10 +31,10 @@ echo "Temporarily stopping Nginx"
 docker stop seedboxdocker_front_1
 echo "Generating/Renewing certificate"
 docker run -it --rm \
-    -v /etc/letsencrypt:/etc/letsencrypt \
+    -v $tmpFolder/letsencrypt:/etc/letsencrypt \
     -p 80:80 -p 443:443 \
     xataz/letsencrypt \
         certonly --non-interactive --renew-by-default --standalone --standalone-supported-challenges tls-sni-01 --rsa-key-size 4096 --email $EMAIL --agree-tos -d $URL $SUBDOMAINS2
-
+cp $tmpFolder/letsencrypt/live/$URL/* ssl/
 echo "Restarting web server"
 docker start seedboxdocker_front_1
