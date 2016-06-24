@@ -5,17 +5,14 @@ echo
 echo "<------------------------------------------------->"
 echo "cronjob running at "$(date)
 tmpFolder=$1
-echo "Updating certbot script. It will display help info, which you can ignore"
+
 . $tmpFolder/letsencrypt/defaults/domains.conf
-docker run -it --rm \
-    -v $tmpFolder/letsencrypt:/etc/letsencrypt \
-    -p 80:80 -p 443:443 \
-    xataz/letsencrypt -n -h
+
 echo "URL is" $URL
-echo "Subdomains are" $SUBDOMAINS
+echo "Subdomains are" $SUBDOMAINS2
 echo "deciding whether to renew the cert(s)"
-if [ -f "$tmpFolder/letsencrypt/config/keys/fullchain.pem" ]; then
-  EXP=$(date -d "`openssl x509 -in $tmpFolder/letsencrypt/config/keys/fullchain.pem -text -noout|grep "Not After"|cut -c 25-`" +%s)
+if [ -f "$tmpFolder/letsencrypt/live/$URL/fullchain.pem" ]; then
+  EXP=$(date -d "`openssl x509 -in $tmpFolder/letsencrypt/live/$URL/fullchain.pem -text -noout|grep "Not After"|cut -c 25-`" +%s)
   DATENOW=$(date -d "now" +%s)
   DAYS_EXP=$(( ( $EXP - $DATENOW ) / 86400 ))
   if [[ $DAYS_EXP -gt 30 ]]; then

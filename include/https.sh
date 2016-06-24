@@ -30,23 +30,25 @@ if [ ! "$URL" = "$ORIGURL" ] || [ ! "$SUBDOMAINS" = "$ORIGSUBDOMAINS" ]; then
   echo "Different sub/domains entered than what was used before. Revoking and deleting existing certificate, and an updated one will be created"
   docker run -it --rm \
     -v $tmpFolder/letsencrypt:/etc/letsencrypt \
-    -p 80:80 -p 443:443 \
+    -p 8080:80 -p 8443:443 \
     xataz/letsencrypt \
-        revoke --non-interactive --cert-path /etc/letsencrypt/config/keys/fullchain.pem
-  rm -rf $tmpFolder/letsencrypt/config/etc
-  mkdir -p $tmpFolder/letsencrypt/config/etc/letsencrypt
+        revoke --non-interactive --cert-path /etc/letsencrypt/live/$URL/fullchain.pem
+  rm -rf $tmpFolder/letsencrypt/live/$URL
+  rm -rf /ssl/*.pem
   echo -e "ORIGURL=\"$URL\" ORIGSUBDOMAINS=\"$SUBDOMAINS\"" > $tmpFolder/letsencrypt/config/donoteditthisfile.conf
 fi
 chmod +x $INCLUDE/letsencrypt.sh 
 echo "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" > $tmpFolder/letsencryptcron.conf
-echo "0 2 * * * $here/$INCLUDE/letsencrypt.sh $tmpFolder >> $tmpFolder/letsencrypt/config/log/letsencrypt/letsencrypt.log 2>&1" >> $tmpFolder/letsencryptcron.conf
-#crontab $tmpFolder/letsencryptcron.conf
+echo "0 2 * * * $here/$INCLUDE/letsencrypt.sh $tmpFolder >> $tmpFolder/letsencrypt.log 2>&1" >> $tmpFolder/letsencryptcron.conf
+crontab $tmpFolder/letsencryptcron.conf
 }
 
 function self ()
 {
 mkdir -p ssl
-openssl req -x509 -nodes -days 365 -newkey rsa:4096 -keyout ssl/nginx.key -out ssl/nginx.crt
+openssl req -x509 -nodes -days 365 -newkey rsa:4096 \
+      -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=*.$server_name" \
+      -keyout ssl/nginx.key -out ssl/nginx.crt
 
 }
 
