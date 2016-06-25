@@ -3,6 +3,8 @@ ignoreip = 127.0.0.1/8
 bantime  = 3600
 findtime  = 3600
 maxretry = 3
+banaction = docker-action
+            iptables-multiport
 
 [ssh]
 enabled = true
@@ -38,7 +40,6 @@ enabled  = false
 port     = ftp,ftp-data,ftps,ftps-data
 filter   = vsftpd
 logpath  = /var/log/vsftpd.log
-banaction = iptables-multiport
 # or overwrite it in jails.local to be
 # logpath = /var/log/auth.log
 # if you want to rely on PAM failed login attempts

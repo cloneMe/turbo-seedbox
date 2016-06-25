@@ -58,6 +58,7 @@ services:
     volumes:
         - #pwd#/include/fail2ban/jail.txt:/etc/fail2ban/jail.local:ro
         - #pwd#/include/fail2ban/nginx-http-auth.conf:/etc/fail2ban/filter.d/nginx-http-auth.conf:ro
+        - #pwd#/include/fail2ban/docker-action.conf:/etc/fail2ban/action.d/docker-action.conf:ro
         - #pwd#/include/fail2ban/nginx-badbots.conf:/etc/fail2ban/filter.d/nginx-badbots.conf:ro
         - #seedboxFolder#/log:/var/log/
         - /var/log:/host
