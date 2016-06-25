@@ -89,6 +89,19 @@ http {
     }
 #plex_end#
 
+	upstream headphones {
+        server seedboxdocker_headphones_1:8181;
+    }
+    server {
+        include common.conf;
+        server_name ~^(headphones)(\.\w+)+$;
+
+        location / {
+            proxy_pass http://headphones;
+        }
+    }
+#headphones_end#
+
 #upstream couchPotato 
     server {
         include common.conf;

@@ -13,16 +13,22 @@ EMAIL="seedbox@yopmail.com"
 #see http://php.net/manual/en/timezones.php
 TZ="Europe/Paris"
 #using letsEncrypt, delete subdomains not defined on DNS side
-SUBDOMAINS="files,rtorrent,sickrage,couchpotato,plex,explorer"
+SUBDOMAINS="files,rtorrent,sickrage,couchpotato,plex,explorer,headphones"
+
 
 ############### SERVER
 # All servers with the property at true will be deployed.
 fail2ban=true
+
 # https://hub.docker.com/r/timhaak/plex/
 plex=true
 sickrage=true
 couchPotato=true
 rtorrent=true
+# https://mondedie.fr/viewtopic.php?id=7475
+# not yet multi users
+headphones=f
+
 # https://hub.docker.com/r/kylemanna/openvpn/
 # createVpnFor.sh will be generated automatically. 
 # Run './createVpnFor.sh foo' to create foo.ovpn
@@ -39,9 +45,11 @@ explorer=f
 
 #END SERVER
 
-#use "#" if you have the following Error: 
+#set "#" if you have the following Error: 
 #Unable to set up server: sqlite3_statement_backend::prepare: disk I/O error for SQL: PRAGMA cache_size=4000
 plex_config=""
+#set "#" if you cannot connect to headphones
+headphones_config=""
 
 #where find nginx.conf, htpasswd.txt, ...
 here=`pwd`
@@ -49,8 +57,6 @@ here=`pwd`
 #By default, get the parent directory of current directory
 seedboxFiles="$(dirname "$here")"
 
-#docker option, see https://docs.docker.com/engine/reference/commandline/build/, for example: q 
-mode=""
 
 #launch scripts
 INCLUDE="include"

@@ -126,12 +126,13 @@ done < "$users"
 
 sed -e 's|#sickrage_conf#|'"$sickrage_conf"'|g' -e 's|#couchpotato_conf#|'"$cp_ng_conf"'|g' -e "s|#server_name#|$server_name|g" ./"$INCLUDE"/nginx.conf.tmpl > ./nginx.conf
 
-sed -e 's|#couckPotato_conf#|'"$cp_dc_conf"'|g' -e "s|#pwd#|$here|g"  -e "s|#seedboxFolder#|$seedboxFiles|g" -e "s|#server_name#|$server_name|g" -e "s|#plex_config#|$plex_config|g" ./"$INCLUDE"/docker-compose.yml.tmpl > ./docker-compose.yml
+sed -e 's|#couckPotato_conf#|'"$cp_dc_conf"'|g' -e "s|#pwd#|$here|g"  -e "s|#seedboxFolder#|$seedboxFiles|g" -e "s|#server_name#|$server_name|g" ./"$INCLUDE"/docker-compose.yml.tmpl > ./docker-compose.yml
 
 #Delete undeployed servers
 depends_on="$depends_on$(delete "plex" $plex)"
 depends_on="$depends_on$(delete "sickrage" $sickrage)"
 depends_on="$depends_on$(delete "rtorrent" $rtorrent)"
+depends_on="$depends_on$(delete "headphones" $headphones)"
 delete "couchPotato" $couchPotato > /dev/null
 delete "openvpn" $openvpn > /dev/null
 delete "teamspeak" $teamspeak > /dev/null
@@ -147,6 +148,8 @@ fi
 sed -i 's|#useSSL#|'"$useSSL"'|g' docker-compose.yml
 sed -i 's|#TZ#|'"$TZ"'|g' docker-compose.yml
 sed -i 's|#frontend_dependencies#|'"$depends_on"'|g' docker-compose.yml
+sed -i "s|#plex_config#|$plex_config|g" docker-compose.yml
+sed -i "s|#headphones_config#|$headphones_config|g" docker-compose.yml
 
 
 #First idea: ln /var/log/auth.log $seedboxFiles/log/ssh/host.log

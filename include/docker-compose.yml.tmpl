@@ -141,6 +141,20 @@ services:
        - #seedboxFolder#/downloads:/torrents
 #explorer_end#
 
+ headphones:
+   image: pwntr/headphones-alpine
+   container_name: seedboxdocker_headphones_1
+   restart: always
+   networks: 
+      - seedbox
+   volumes:
+#headphones_config#       - #seedboxFolder#/config/headphones:/config 
+       - #seedboxFolder#/downloads/rtorrent:/downloads 
+       - #seedboxFolder#/downloads/music:/music
+   environment:
+        - TZ=#TZ#
+#headphones_end#
+
  filemanager:
     image: cloneme/filemanager
     container_name: seedboxdocker_filemanager_1
