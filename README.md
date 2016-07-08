@@ -4,7 +4,8 @@ This project deploys a **multi-users** seedbox, using Docker. It will install do
 - rtorrent: to download torrent.
 - sickrage: Automatic Video Library Manager for TV Shows. It watches for new episodes of your favorite shows, and when they are posted it does its magic.
 - couchpotato: same thing but for films.
-- plex: to stream videos from your server.
+- headphones: same thing but for music.
+- plex: to stream videos from your server to your TV or laptop.
 - a VPN server: openVPN.
 - a teamspeak server.
 - a FTP server, a file manager (https://github.com/simogeo/Filemanager), ...
