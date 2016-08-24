@@ -73,6 +73,8 @@ Otherwise, you need to declare each subdomain.
 * Delete all images `docker rmi $(docker images -q)`
 
 ## 5. Server configuration
+**After launching build.sh, a folder named "help" is generated ;)**
+
 ### 5.1 Sickrage
 Open "Search Settings" and click on the "torrent search" tab.
 Choose "rtorrent" and put following values:

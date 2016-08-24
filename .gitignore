@@ -8,4 +8,5 @@ local.sh
 tmp
 createVpnFor.sh
 *.ovpn
+help
 

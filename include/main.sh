@@ -42,6 +42,10 @@ elif [ "$useHttps" = "provided" ]; then
    echo "error: ssl/nginx.key or ssl/privkey.pem not found. Provide these files then run this script again."
  fi
 fi
+httpMode="http"
+if [ "$useSSL" = "true" ]; then
+ httpMode="https"
+fi
 
 if [[ "$openvpn" = "true" && ! -d "$seedboxFiles/config/openvpn" ]]; then
    OVPN_DATA="$seedboxFiles/config/openvpn:/etc/openvpn"
@@ -103,6 +107,94 @@ else
 fi
 }
 
+function generateHelp {
+mkdir -p help
+userUp=$(echo "$1" | tr '[:lower:]' '[:upper:]')
+
+echo "
+5.1 Sickrage
+
+Open \"Search Settings\" and click on the \"torrent search\" tab. Choose \"rtorrent\" and put following values:
+
+    Search Settings: $httpMode://rtorrent.$server_name/RPC$userUp
+    Http auth : basic
+    Set userName & password
+    Download file location: /downloads/rtorrent/$1/watch
+
+Open the \"Post Processing\" menu, activate it and set following values:
+
+    Processing Method: hard link
+
+When adding a a new serie, set /downloads/rtorrent/$1/serie as the parent folder (step 2).
+
+5.2 Couchpotato
+
+It is not necessary to set username & password. Activate \"rtorrent\" and put following values:
+
+    Host: $httpMode://rtorrent.$server_name
+    Rpc Url: /RPC$userUp
+    Http auth : basic
+    Set userName & password
+    Download file location: /downloads/rtorrent/$1/film
+
+" > help/$1.txt
+}
+
+function generateURL {
+mkdir -p help
+echo "
+Following services are deployed:
+" > help/URL.txt
+if [ "$files" = "true" ]; then
+   echo "
+File manager
+$httpMode://files.$server_name
+" >> help/URL.txt
+fi
+if [ "$rtorrent" = "true" ]; then
+   echo "
+rtorrent
+$httpMode://rtorrent.$server_name
+" >> help/URL.txt
+fi
+if [ "$sickrage" = "true" ]; then
+   echo "
+sickrage
+$httpMode://sickrage.$server_name
+" >> help/URL.txt
+fi
+if [ "$couchpotato" = "true" ]; then
+   echo "
+couchpotato
+$httpMode://couchpotato.$server_name
+" >> help/URL.txt
+fi
+if [ "$headphones" = "true" ]; then
+   echo "
+headphones
+$httpMode://headphones.$server_name
+" >> help/URL.txt
+fi
+if [ "$explorer" = "true" ]; then
+   echo "
+explorer
+$httpMode://explorer.$server_name
+" >> help/URL.txt
+fi
+if [ "$plex" = "true" ]; then
+   echo "
+Plex
+$httpMode://plex.$server_name/web/index.html
+" >> help/URL.txt
+fi
+if [ "$pureftpd" = "true" ]; then
+   echo "
+FTP
+ftp://$server_name
+" >> help/URL.txt
+fi
+}
+
 sickrage_conf=""
 web_port=20001
 
@@ -121,8 +213,9 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 		cp_dc_conf=$(addCouchPotato "$cp_dc_conf" "$userName")
 		depends_on="$depends_on       - couchPotato_$userName\n"
 	fi
+	generateHelp "$userName"
 done < "$users"
-
+generateURL
 
 sed -e 's|#sickrage_conf#|'"$sickrage_conf"'|g' -e 's|#couchpotato_conf#|'"$cp_ng_conf"'|g' -e "s|#server_name#|$server_name|g" ./"$INCLUDE"/nginx.conf.tmpl > ./nginx.conf
 
