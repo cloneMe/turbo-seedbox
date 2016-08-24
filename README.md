@@ -4,11 +4,12 @@ This project deploys a **multi-users** seedbox, using Docker. It will install do
 - rtorrent: to download torrent.
 - sickrage: Automatic Video Library Manager for TV Shows. It watches for new episodes of your favorite shows, and when they are posted it does its magic.
 - couchpotato: same thing but for films.
-- plex: to stream videos from your server.
+- headphones: same thing but for music.
+- plex: to stream videos from your server to your TV or laptop.
 - a VPN server: openVPN.
 - a teamspeak server.
 - a FTP server, a file manager (https://github.com/simogeo/Filemanager), ...
-- WARNING: By default, fail2ban is deployed to protect the host. You have only one try to connect using SSH. If you enter an incorrect password, you will be ban during 1 hour. See include/fail2ban.
+- WARNING: By default, fail2ban is deployed to protect the host. You have only one try to connect using SSH. If you enter an incorrect password, you will be ban during 1 hour. And you have three tries for websites. See include/fail2ban.
 
 
 ## 0. Download sources
@@ -19,7 +20,7 @@ You can skip this part, it's done automatically.
 see: https://docs.docker.com/engine/installation/
 
 ### 0.2 Download sources
-On Windows, I recommend you to install this project in your home, i.e.: C:\Users\< user >\docker.
+On Windows, I recommend you to install this project in your home, i.e.: C:\Users\< user >\docker. (if you use Hyper-V to virtualize the Docker Engine, you can install it where you want)
 ```bash
 git clone https://github.com/cloneMe/turbo-seedbox.git
 cd turbo-seedbox
@@ -55,7 +56,7 @@ It will:
 
 
 ## 3. Configure your DNS
-Following subdomains are used: files, rtorrent, sickrage, couchpotato and explorer.
+Following subdomains are used: files, rtorrent, sickrage, couchpotato, headphones and explorer.
 If your DNS handle wildcards, you are lucky.
 Otherwise, you need to declare each subdomain.
 
