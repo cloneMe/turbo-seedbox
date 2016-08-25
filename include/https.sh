@@ -39,8 +39,13 @@ if [ ! "$URL" = "$ORIGURL" ] || [ ! "$SUBDOMAINS" = "$ORIGSUBDOMAINS" ]; then
 fi
 chmod +x $INCLUDE/letsencrypt.sh 
 echo "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" > $tmpFolder/letsencryptcron.conf
-echo "0 2 * * * $here/$INCLUDE/letsencrypt.sh $tmpFolder >> $tmpFolder/letsencrypt.log 2>&1" >> $tmpFolder/letsencryptcron.conf
+here2=`pwd`
+echo "0 2 * * * $here/$INCLUDE/letsencrypt.sh $tmpFolder $here2/ssl/ >> $tmpFolder/letsencrypt.log 2>&1" >> $tmpFolder/letsencryptcron.conf
 crontab $tmpFolder/letsencryptcron.conf
+if [[ ! -f ssl/dhparams.pem ]]; then
+   openssl dhparam -out ssl/dhparams.pem 4096 &
+fi
+
 }
 
 function self ()
