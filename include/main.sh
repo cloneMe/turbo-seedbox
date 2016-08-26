@@ -122,7 +122,7 @@ Open \"Search Settings\" and click on the \"torrent search\" tab. Choose \"rtorr
     Download file location: /downloads/rtorrent/$1/watch
 
 Open the \"Post Processing\" menu, activate it and set following values:
-
+    /downloads/rtorrent/$1/watch
     Processing Method: hard link
 
 When adding a a new serie, set /downloads/rtorrent/$1/serie as the parent folder (step 2).
@@ -137,6 +137,12 @@ It is not necessary to set username & password. Activate \"rtorrent\" and put fo
     Set userName & password
     Download file location: /downloads/rtorrent/$1/film
 
+Plex
+Issue : Plex NEVER asks for authentication. Everybody can access to it :/
+nano $seedboxFiles/config/plex/Library/Application\ Support/Plex\ Media\ Server/Preferences.xml
+There is \"Disable Remote Security=1\". Changed that 1 to a 0 and restarted my Plex : docker restart seedboxdocker_plex_1
+Src : https://forums.plex.tv/discussion/132399/plex-security-issue
+
 " > help/$1.txt
 }
 
@@ -145,7 +151,7 @@ mkdir -p help
 echo "
 Following services are deployed:
 " > help/URL.txt
-if [ "$files" = "true" ]; then
+if [ "$filemanager" = "true" ]; then
    echo "
 File manager
 $httpMode://files.$server_name
@@ -163,9 +169,9 @@ sickrage
 $httpMode://sickrage.$server_name
 " >> help/URL.txt
 fi
-if [ "$couchpotato" = "true" ]; then
+if [ "$couchPotato" = "true" ]; then
    echo "
-couchpotato
+couchPotato
 $httpMode://couchpotato.$server_name
 " >> help/URL.txt
 fi
@@ -220,6 +226,8 @@ generateURL
 sed -e 's|#sickrage_conf#|'"$sickrage_conf"'|g' -e 's|#couchpotato_conf#|'"$cp_ng_conf"'|g' -e "s|#server_name#|$server_name|g" ./"$INCLUDE"/nginx.conf.tmpl > ./nginx.conf
 
 sed -e 's|#couckPotato_conf#|'"$cp_dc_conf"'|g' -e "s|#pwd#|$here|g"  -e "s|#seedboxFolder#|$seedboxFiles|g" -e "s|#server_name#|$server_name|g" ./"$INCLUDE"/docker-compose.yml.tmpl > ./docker-compose.yml
+sed -i 's|#PLEX_USERNAME#|'"$plexUser"'|g' docker-compose.yml
+sed -i 's|#PLEX_PASSWORD#|'"$plexPass"'|g' docker-compose.yml
 
 #Delete undeployed servers
 depends_on="$depends_on$(delete "plex" $plex)"

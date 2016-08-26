@@ -22,6 +22,9 @@ fail2ban=true
 
 # https://hub.docker.com/r/timhaak/plex/
 plex=true
+plexUser=Homer
+plexPass=PassWord
+
 sickrage=true
 couchPotato=true
 rtorrent=true

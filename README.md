@@ -86,6 +86,12 @@ Otherwise, you need to declare each subdomain.
 ## 5. Server configuration
 **After launching build.sh, a folder named "help" is generated ;)**
 
+Plex
+Issue : Plex NEVER asks for authentication. Everybody can access to it :/
+`nano $seedboxFiles/config/plex/Library/Application\ Support/Plex\ Media\ Server/Preferences.xml`
+There is "Disable Remote Security=1". Changed that 1 to a 0 and restarted my Plex : docker restart seedboxdocker_plex_1
+Src : https://forums.plex.tv/discussion/132399/plex-security-issue
+
 
 # [For dev]
 - run  `cp build.sh local.sh` and work with local.sh

@@ -90,6 +90,8 @@ services:
         - "32400:32400"
     environment:
         - VIRTUAL_HOST=plex.dock
+        - PLEX_USERNAME=#PLEX_USERNAME#
+        - PLEX_PASSWORD=#PLEX_PASSWORD#
     volumes:
 #Some users have the folliwing issue
 #Error: Unable to set up server: sqlite3_statement_backend::prepare: disk I/O error for SQL: PRAGMA cache_size=4000
