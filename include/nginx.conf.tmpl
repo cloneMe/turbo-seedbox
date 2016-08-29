@@ -89,6 +89,32 @@ http {
     }
 #plex_end#
 
+	upstream emby {
+        server emby:8096;
+    }
+    server {
+        include common.conf;
+        server_name ~^(emby)(\.\w+)+$;
+
+        location / {
+            proxy_pass http://emby;
+        }
+    }
+#emby_end#
+
+	upstream limbomedia {
+        server limbomedia:8000;
+    }
+    server {
+        include common.conf;
+        server_name ~^(media)(\.\w+)+$;
+
+        location / {
+            proxy_pass http://limbomedia;
+        }
+    }
+#limbomedia_end#
+
 	upstream headphones {
         server seedboxdocker_headphones_1:8181;
     }

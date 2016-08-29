@@ -193,6 +193,18 @@ Plex
 $httpMode://plex.$server_name/web/index.html
 " >> help/URL.txt
 fi
+if [ "$emby" = "true" ]; then
+   echo "
+emby
+$httpMode://emby.$server_name
+" >> help/URL.txt
+fi
+if [ "$limbomedia" = "true" ]; then
+   echo "
+limbomedia
+$httpMode://media.$server_name
+" >> help/URL.txt
+fi
 if [ "$pureftpd" = "true" ]; then
    echo "
 FTP
@@ -231,6 +243,8 @@ sed -i 's|#PLEX_PASSWORD#|'"$plexPass"'|g' docker-compose.yml
 
 #Delete undeployed servers
 depends_on="$depends_on$(delete "plex" $plex)"
+depends_on="$depends_on$(delete "emby" $emby)"
+depends_on="$depends_on$(delete "limbomedia" $limbomedia)"
 depends_on="$depends_on$(delete "sickrage" $sickrage)"
 depends_on="$depends_on$(delete "rtorrent" $rtorrent)"
 depends_on="$depends_on$(delete "headphones" $headphones)"
@@ -250,6 +264,7 @@ sed -i 's|#useSSL#|'"$useSSL"'|g' docker-compose.yml
 sed -i 's|#TZ#|'"$TZ"'|g' docker-compose.yml
 sed -i 's|#frontend_dependencies#|'"$depends_on"'|g' docker-compose.yml
 sed -i "s|#plex_config#|$plex_config|g" docker-compose.yml
+sed -i "s|#emby_config#|$emby_config|g" docker-compose.yml
 sed -i "s|#headphones_config#|$headphones_config|g" docker-compose.yml
 
 

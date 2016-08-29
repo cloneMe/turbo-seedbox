@@ -13,7 +13,7 @@ EMAIL="seedbox@yopmail.com"
 #see http://php.net/manual/en/timezones.php
 TZ="Europe/Paris"
 #using letsEncrypt, delete subdomains not defined on DNS side
-SUBDOMAINS="files,rtorrent,sickrage,couchpotato,plex,explorer,headphones"
+SUBDOMAINS="files,rtorrent,sickrage,couchpotato,plex,explorer,headphones,media,emby"
 
 
 ############### SERVER
@@ -24,6 +24,10 @@ fail2ban=true
 plex=true
 plexUser=Homer
 plexPass=PassWord
+
+emby=f
+# login with admin / admin 
+limbomedia=f
 
 sickrage=true
 couchPotato=true
@@ -51,6 +55,8 @@ explorer=f
 #set "#" if you have the following Error: 
 #Unable to set up server: sqlite3_statement_backend::prepare: disk I/O error for SQL: PRAGMA cache_size=4000
 plex_config=""
+#set "#" if necessary
+emby_config=""
 #set "#" if you cannot connect to headphones
 headphones_config=""
 

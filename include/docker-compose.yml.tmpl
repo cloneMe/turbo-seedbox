@@ -78,6 +78,8 @@ services:
         - #seedboxFolder#/downloads/:/torrents
 #sickrage_end#
 
+ #couckPotato_conf#
+
  plex:
     image: timhaak/plex
     container_name: seedboxdocker_plex_1
@@ -100,7 +102,29 @@ services:
         - #seedboxFolder#/downloads/:/data
 #plex_end#
 
- #couckPotato_conf#
+ emby:
+    image: emby/embyserver
+    container_name: emby
+    restart: always
+    networks: 
+      - seedbox
+    environment:
+        - TZ=#TZ#
+        - AUTO_UPDATES_ON=true
+    volumes:
+#emby_config#        - #seedboxFolder#/config/emby:/config
+        - #seedboxFolder#/downloads/:/media
+#emby_end#
+
+ limbomedia:
+    image: limbomedia/limbomedia
+    container_name: limbomedia
+    restart: always
+    networks:
+      - seedbox
+    volumes:
+        - #seedboxFolder#/downloads/:/data
+#limbomedia_end#
 
  openvpn:
     image: kylemanna/openvpn
