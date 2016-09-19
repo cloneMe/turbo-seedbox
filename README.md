@@ -5,7 +5,7 @@ This project deploys a **multi-users** seedbox, using Docker. It will install do
 - sickrage: Automatic Video Library Manager for TV Shows. It watches for new episodes of your favorite shows, and when they are posted it does its magic.
 - couchpotato: same thing but for films.
 - headphones: same thing but for music.
-- plex: to stream videos from your server to your TV or laptop.
+- plex, emby and limboserver: to stream videos from your server to your TV or laptop.
 - a VPN server: openVPN.
 - a teamspeak server.
 - a FTP server, a file manager (https://github.com/simogeo/Filemanager), ...
@@ -56,7 +56,7 @@ It will:
 
 
 ## 3. Configure your DNS
-Following subdomains are used: files, rtorrent, sickrage, couchpotato, headphones and explorer.
+Following subdomains are used: files, rtorrent, sickrage, couchpotato, headphones, explorer, emby, media.
 If your DNS handle wildcards, you are lucky.
 Otherwise, you need to declare each subdomain.
 
@@ -95,6 +95,7 @@ Src : https://forums.plex.tv/discussion/132399/plex-security-issue
 
 # [For dev]
 - run  `cp build.sh local.sh` and work with local.sh
+## Windows users
 - Edit your C:\Windows\System32\drivers\etc\hosts
 
 And add (if the docker's IP is 192.168.99.100, run "docker-machine ip default" to know it)
@@ -115,6 +116,12 @@ http://sickrage.dock
 http://couchpotato.dock
 http://explorer.dock
 ```
+## Linux users
+- Edit your /etc/hosts
+```
+127.0.0.1 dock
+...
+```
 
 # Links
 https://github.com/Kelvin-Chen/seedbox
@@ -122,6 +129,11 @@ https://github.com/Kelvin-Chen/seedbox
 Docker : https://github.com/wsargent/docker-cheat-sheet
 
 Plex: https://hub.docker.com/r/timhaak/plex/
+https://forums.plex.tv/discussion/132399/plex-security-issue
+
+Emby: https://github.com/MediaBrowser/Emby
+
+LimboMedia: http://limbomedia.net/
 
 Explorer: https://github.com/soyuka/explorer
 

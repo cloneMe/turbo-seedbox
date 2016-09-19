@@ -137,6 +137,10 @@ It is not necessary to set username & password. Activate \"rtorrent\" and put fo
     Set userName & password
     Download file location: /downloads/rtorrent/$1/film
 
+You can add providers.
+For example, run git clone https://github.com/Snipees/couchpotato.providers.french
+Then copy t411 & cpasbien in $seedboxFiles/config/couchpotato_$1/custom_plugins
+	
 Plex
 Issue : Plex NEVER asks for authentication. Everybody can access to it :/
 nano $seedboxFiles/config/plex/Library/Application\ Support/Plex\ Media\ Server/Preferences.xml
@@ -267,7 +271,10 @@ sed -i "s|#plex_config#|$plex_config|g" docker-compose.yml
 sed -i "s|#emby_config#|$emby_config|g" docker-compose.yml
 sed -i "s|#headphones_config#|$headphones_config|g" docker-compose.yml
 
-
+if [[ "$headphones" = "true" && ! -f $seedboxFiles/config/headphones/headphones.ini ]]; then
+ mkdir -p $seedboxFiles/config/headphones
+ cp $INCLUDE/headphones.ini $seedboxFiles/config/headphones/headphones.ini
+fi
 #First idea: ln /var/log/auth.log $seedboxFiles/log/ssh/host.log
 # will not work because you can have a log rotation.
 # Fix : use /var/log in the fail2ban container

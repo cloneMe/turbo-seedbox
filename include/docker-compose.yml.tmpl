@@ -31,6 +31,7 @@ services:
     # On ne litmite pas rTorrent vu que c'est le process "principal" de la machine
     # mem_limit: 2000m
     # memswap_limit: 1000m
+    # cpu_shares: 512
     environment:
         - VIRTUAL_HOST=rtorrent
         - USE_SSL=#useSSL#
