@@ -140,7 +140,7 @@ It is not necessary to set username & password. Activate \"rtorrent\" and put fo
 You can add providers.
 For example, run git clone https://github.com/Snipees/couchpotato.providers.french
 Then copy t411 & cpasbien in $seedboxFiles/config/couchpotato_$1/custom_plugins
-	
+  
 Plex
 Issue : Plex NEVER asks for authentication. Everybody can access to it :/
 nano $seedboxFiles/config/plex/Library/Application\ Support/Plex\ Media\ Server/Preferences.xml
@@ -211,6 +211,30 @@ $httpMode://media.$server_name
 fi
 if [ "$pureftpd" = "true" ]; then
    echo "
+muximux
+$httpMode://muximux.$server_name
+" >> help/URL.txt
+fi
+if [ "$muximux" = "true" ]; then
+   echo "
+glances
+$httpMode://glances.$server_name
+" >> help/URL.txt
+fi
+if [ "$glances" = "true" ]; then
+   echo "
+plexpy
+$httpMode://plexpy.$server_name
+" >> help/URL.txt
+fi
+if [ "$plexpy" = "true" ]; then
+   echo "
+syncthing
+$httpMode://syncthing.$server_name
+" >> help/URL.txt
+fi
+if [ "$syncthing" = "true" ]; then
+   echo "
 FTP
 ftp://$server_name
 " >> help/URL.txt
@@ -226,16 +250,16 @@ cp_ng_conf=""
 while IFS='' read -r line || [[ -n "$line" ]]; do
     #echo "Text read from file: $line"
     IFS=':' read -r userName string <<< "$line"
-	#sickrage
-	sickrage_conf=$(addProxy_pass "$sickrage_conf" "seedboxdocker_sickrage" "$web_port" "$userName")
-	web_port=$[$web_port+1]
-	#CouchPotato
-	if [ "$couchPotato" = "true" ]; then
-		cp_ng_conf=$(addProxy_pass "$cp_ng_conf" "seedboxdocker_couchpotato_$userName" "5050" "$userName")
-		cp_dc_conf=$(addCouchPotato "$cp_dc_conf" "$userName")
-		depends_on="$depends_on       - couchPotato_$userName\n"
-	fi
-	generateHelp "$userName"
+  #sickrage
+  sickrage_conf=$(addProxy_pass "$sickrage_conf" "seedboxdocker_sickrage" "$web_port" "$userName")
+  web_port=$[$web_port+1]
+  #CouchPotato
+  if [ "$couchPotato" = "true" ]; then
+    cp_ng_conf=$(addProxy_pass "$cp_ng_conf" "seedboxdocker_couchpotato_$userName" "5050" "$userName")
+    cp_dc_conf=$(addCouchPotato "$cp_dc_conf" "$userName")
+    depends_on="$depends_on       - couchPotato_$userName\n"
+  fi
+  generateHelp "$userName"
 done < "$users"
 generateURL
 
@@ -259,6 +283,10 @@ depends_on="$depends_on$(delete "explorer" $explorer)"
 delete "pureftpd" $pureftpd > /dev/null
 depends_on="$depends_on$(delete "filemanager" $filemanager)"
 delete "fail2ban" $fail2ban > /dev/null
+depends_on="$depends_on$(delete "syncthing" $syncthing)"
+depends_on="$depends_on$(delete "plexpy" $plexpy)"
+depends_on="$depends_on$(delete "glances" $glances)"
+depends_on="$depends_on$(delete "muximux" $muximux)"
 
 if [ "$depends_on" != "" ]; then
  depends_on="    depends_on: \n$depends_on"

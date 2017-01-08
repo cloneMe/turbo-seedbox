@@ -2,7 +2,7 @@
 # MAINTAINER https://github.com/cloneMe
 
 # run "docker-machine ip default" or set your domain name
-server_name=192.168.99.100
+server_name=192.168.1.13
 # (Not yet implemented) letsEncrypt or self or provided
 # letsEncrypt: Let's Encrypt is a free, automated, and open certificate authority brought to you
 # self: generate a self-signed certificate
@@ -13,7 +13,7 @@ EMAIL="seedbox@yopmail.com"
 #see http://php.net/manual/en/timezones.php
 TZ="Europe/Paris"
 #using letsEncrypt, delete subdomains not defined on DNS side
-SUBDOMAINS="files,rtorrent,sickrage,couchpotato,plex,explorer,headphones,media,emby"
+SUBDOMAINS="files,rtorrent,sickrage,couchpotato,plex,explorer,headphones,media,emby,muximux,glances,syncthing,plexpy"
 
 
 ############### SERVER
@@ -22,8 +22,8 @@ fail2ban=true
 
 # https://hub.docker.com/r/timhaak/plex/
 plex=true
-plexUser=Homer
-plexPass=PassWord
+plexUser=PlexUser
+plexPass=PlexPass
 
 emby=f
 # login with admin / admin 
@@ -50,6 +50,18 @@ filemanager=true
 # enter : admin/admin then configure and update the home to /torrents
 explorer=f
 
+# linuxserver/muximux
+muximux=true
+
+# docker.io/nicolargo/glances
+glances=true
+
+# linuxserver/syncthing
+syncthing=true
+
+#linuxserver/plexpy
+plexpy=true
+
 #END SERVER
 
 #set "#" if you have the following Error: 
@@ -64,7 +76,7 @@ headphones_config=""
 here=`pwd`
 # where save following folders: config, downloads, log
 #By default, get the parent directory of current directory
-seedboxFiles="$(dirname "$here")"
+seedboxFiles="/SeedBoxFiles"
 
 
 #launch scripts

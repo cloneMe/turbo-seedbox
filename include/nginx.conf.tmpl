@@ -38,10 +38,10 @@ http {
         }
     }
     
-	upstream rtorrent {
+    upstream rtorrent {
         server seedboxdocker_rtorrent_1;
     }
-	upstream rS {
+    upstream rS {
         server seedboxdocker_rtorrent_1:443;
     }
     server {
@@ -51,12 +51,12 @@ http {
         location / {
             fastcgi_pass_header Authorization;
             include /etc/nginx/fastcgi_params;
-			if ($ssl_protocol = "") {
-				proxy_pass http://rtorrent;
-			} 
-			if ($ssl_protocol != "") {
-			   proxy_pass https://rS;
-			}
+            if ($ssl_protocol = "") {
+                proxy_pass http://rtorrent;
+            } 
+            if ($ssl_protocol != "") {
+               proxy_pass https://rS;
+            }
             
         }
     }
@@ -76,7 +76,7 @@ http {
     }
 #sickrage_end#
 
-	upstream plex {
+    upstream plex {
         server seedboxdocker_plex_1:32400;
     }
     server {
@@ -89,7 +89,7 @@ http {
     }
 #plex_end#
 
-	upstream emby {
+    upstream emby {
         server emby:8096;
     }
     server {
@@ -102,7 +102,7 @@ http {
     }
 #emby_end#
 
-	upstream limbomedia {
+    upstream limbomedia {
         server limbomedia:8000;
     }
     server {
@@ -115,7 +115,7 @@ http {
     }
 #limbomedia_end#
 
-	upstream headphones {
+    upstream headphones {
         server seedboxdocker_headphones_1:8181;
     }
     server {
@@ -136,13 +136,13 @@ http {
 
         auth_basic           "Restricted";
         auth_basic_user_file /etc/nginx/.htpasswd;
-		location / {
+        location / {
        #couchpotato_conf#
         }
     }
 #couchPotato_end#
 
-	upstream explorer {
+    upstream explorer {
         server seedboxdocker_explorer_1:4859;
     }
     server {
@@ -157,10 +157,10 @@ http {
     }
 #explorer_end#
 
-	upstream filemanager {
+    upstream filemanager {
         server seedboxdocker_filemanager_1;
     }
-	server {
+    server {
         include common.conf;
         server_name ~^(files)(\.\w+)+$;
 
@@ -171,7 +171,66 @@ http {
         }
     }
 #filemanager_end#
-	
+
+    upstream muximux {
+        server seedboxdocker_muximux_1;
+    }
+    server {
+        include common.conf;
+        server_name ~^(muximux)(\.\w+)+$;
+
+        auth_basic           "Restricted";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+        location / {
+            proxy_pass http://muximux;
+        }
+    }
+#muximux_end#
+
+    upstream glances {
+        server seedboxdocker_glances_1:61208;
+    }
+    server {
+        include common.conf;
+        server_name ~^(glances)(\.\w+)+$;
+
+        auth_basic           "Restricted";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+        location / {
+            proxy_pass http://glances;
+        }
+    }
+#glances_end#
+
+    upstream syncthing {
+        server seedboxdocker_syncthing_1:8384;
+    }
+    server {
+        include common.conf;
+        server_name ~^(syncthing)(\.\w+)+$;
+
+        auth_basic           "Restricted";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+        location / {
+            proxy_pass http://syncthing;
+        }
+    }
+#syncthing_end#
+
+    upstream plexpy {
+        server seedboxdocker_plexpy_1:8182;
+    }
+    server {
+        include common.conf;
+        server_name ~^(plexpy)(\.\w+)+$;
+
+        auth_basic           "Restricted";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+        location / {
+            proxy_pass http://plexpy;
+        }
+    }
+#plexpy_end#
 
 }
 

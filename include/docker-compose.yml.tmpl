@@ -96,10 +96,7 @@ services:
         - PLEX_USERNAME=#PLEX_USERNAME#
         - PLEX_PASSWORD=#PLEX_PASSWORD#
     volumes:
-#Some users have the folliwing issue
-#Error: Unable to set up server: sqlite3_statement_backend::prepare: disk I/O error for SQL: PRAGMA cache_size=4000
-#uncomment the next line to test if it works on your side
-#plex_config#        - #seedboxFolder#/config/plex:/config
+        - #seedboxFolder#/config/plex:/config
         - #seedboxFolder#/downloads/:/data
 #plex_end#
 
@@ -209,6 +206,60 @@ services:
         - PUBLICHOST=#server_name#
         - TZ=#TZ#
 #pureftpd_end#
+
+ muximux:
+    image: linuxserver/muximux
+    container_name: seedboxdocker_muximux_1
+    restart: always
+    networks: 
+      - seedbox
+    volumes:
+      - #seedboxFolder#/config/muximux:/config
+#muximux_end#
+
+ glances:
+    image: docker.io/nicolargo/glances
+    container_name: seedboxdocker_glances_1
+    restart: always
+    pid: host
+    networks: 
+      - seedbox
+    ports:
+      - "61208:61208"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - GLANCES_OPT=-w
+#glances_end#
+
+ plexpy:
+    image: linuxserver/plexpy
+    container_name: seedboxdocker_plexpy_1
+    restart: always
+    networks: 
+      - seedbox
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - #seedboxFolder#/config/plexpy:/config
+      - #seedboxFolder#/config/plex/Library/Application\040Support/Plex\040Media\040Server/Logs:/logs:ro
+    ports:
+      - "8182:8181"
+#plexpy_end#
+
+ syncthing:
+    image: linuxserver/syncthing
+    container_name: seedboxdocker_syncthing_1
+    restart: always
+    networks: 
+      - seedbox
+    volumes:
+      - #seedboxFolder#/config/syncthing:/config
+      - #seedboxFolder#/downloads:/storage
+    ports:
+      - "8384:8384"
+      - "22000:22000"
+      - "21027:21027/udp"
+#syncthing_end#
 
 networks:
   seedbox:
