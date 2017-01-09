@@ -89,8 +89,8 @@ services:
       - seedbox
     mem_limit: 2000m
     memswap_limit: 2000m
-    ports:
-        - "32400:32400"
+#    ports:
+#        - "32400:32400"
     environment:
         - VIRTUAL_HOST=plex.dock
         - PLEX_USERNAME=#PLEX_USERNAME#
@@ -224,8 +224,8 @@ services:
     pid: host
     networks: 
       - seedbox
-    ports:
-      - "61208:61208"
+#    ports:
+#      - "61208:61208"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
@@ -238,12 +238,12 @@ services:
     restart: always
     networks: 
       - seedbox
+#    ports:
+#      - "8181:8181"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - #seedboxFolder#/config/plexpy:/config
       - #seedboxFolder#/config/plex/Library/Application\040Support/Plex\040Media\040Server/Logs:/logs:ro
-    ports:
-      - "8182:8181"
 #plexpy_end#
 
  syncthing:
@@ -255,10 +255,10 @@ services:
     volumes:
       - #seedboxFolder#/config/syncthing:/config
       - #seedboxFolder#/downloads:/storage
-    ports:
-      - "8384:8384"
-      - "22000:22000"
-      - "21027:21027/udp"
+#    ports:
+#      - "8384:8384"
+#      - "22000:22000"
+#      - "21027:21027/udp"
 #syncthing_end#
 
 networks:

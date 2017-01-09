@@ -18,12 +18,12 @@ SUBDOMAINS="files,rtorrent,sickrage,couchpotato,plex,explorer,headphones,media,e
 
 ############### SERVER
 # All servers with the property at true will be deployed.
-fail2ban=true
+fail2ban=f
 
 # https://hub.docker.com/r/timhaak/plex/
 plex=true
 plexUser=PlexUser
-plexPass=PlexPass
+plexPass="PlexPass"
 
 emby=f
 # login with admin / admin 
