@@ -71,7 +71,7 @@ echo "$result"
 function addCouchPotato {
 local  result="$1\n"
 result="$result couchPotato_$2:\n"
-result="$result    image: cloneme/couchpotato\n"
+result="$result    image: funtwo/couchpotato:latest-dev\n"
 result="$result    container_name: seedboxdocker_couchpotato_$2\n"
 result="$result    restart: always\n"
 result="$result    networks: \n"
@@ -84,6 +84,14 @@ result="$result        - #seedboxFolder#/downloads/:/torrents\n"
 
 echo "$result"
 }
+
+function addCustomProviders {
+  git clone --depth=1 https://github.com/djoole/couchpotato.provider.t411.git /$tmpFolder/frenchproviders &> /dev/null 
+  mkdir -p $seedboxFiles/config/couchpotato_$1/custom_plugins
+  cp -r /$tmpFolder/frenchproviders/t411 $seedboxFiles/config/couchpotato_$1/custom_plugins/t411
+  rm -rf /$tmpFolder/frenchproviders
+}
+
 function delete {
 if [ "$2" = "true" ]; then
  sed -i "/#$1_end#/d" docker-compose.yml
@@ -258,6 +266,7 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
     cp_ng_conf=$(addProxy_pass "$cp_ng_conf" "seedboxdocker_couchpotato_$userName" "5050" "$userName")
     cp_dc_conf=$(addCouchPotato "$cp_dc_conf" "$userName")
     depends_on="$depends_on       - couchPotato_$userName\n"
+    addCustomProviders $userName
   fi
   generateHelp "$userName"
 done < "$users"
