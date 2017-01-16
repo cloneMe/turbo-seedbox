@@ -76,7 +76,7 @@ headphones_config=""
 here=`pwd`
 # where save following folders: config, downloads, log
 #By default, get the parent directory of current directory
-seedboxFiles="/SeedBoxFiles"
+seedboxFiles="/home/seedbox/SeedBoxFiles"
 
 
 #launch scripts

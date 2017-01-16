@@ -89,8 +89,8 @@ services:
       - seedbox
     mem_limit: 2000m
     memswap_limit: 2000m
-#    ports:
-#        - "32400:32400"
+    ports:
+        - "32400:32400"
     environment:
         - VIRTUAL_HOST=plex.dock
         - PLEX_USERNAME=#PLEX_USERNAME#
