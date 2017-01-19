@@ -298,6 +298,7 @@ depends_on="$depends_on$(delete "explorer" $explorer)"
 delete "pureftpd" $pureftpd > /dev/null
 depends_on="$depends_on$(delete "filemanager" $filemanager)"
 delete "fail2ban" $fail2ban > /dev/null
+depends_on="$depends_on$(delete "cloud" $cloud)"
 depends_on="$depends_on$(delete "syncthing" $syncthing)"
 depends_on="$depends_on$(delete "plexpy" $plexpy)"
 depends_on="$depends_on$(delete "glances" $glances)"
