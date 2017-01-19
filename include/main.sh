@@ -217,6 +217,12 @@ limbomedia
 $httpMode://media.$server_name
 " >> help/URL.txt
 fi
+if [ "$cloud" = "true" ]; then
+   echo "
+cloud
+$httpMode://cloud.$server_name
+" >> help/URL.txt
+fi
 if [ "$pureftpd" = "true" ]; then
    echo "
 muximux

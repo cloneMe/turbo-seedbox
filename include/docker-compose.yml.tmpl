@@ -66,7 +66,7 @@ services:
 #fail2ban_end#
 
  sickrage:
-    image: funtwo/sickrage:latest-master
+    image: funtwo/sickrage:latest-dev
     container_name: seedboxdocker_sickrage
     restart: always
     networks: 
@@ -124,6 +124,17 @@ services:
         - #seedboxFolder#/downloads/:/data
 #limbomedia_end#
 
+ cloud:
+    image: coderaiser/cloudcmd
+    container_name: seedboxdocker_cloud
+    restart: always
+    networks: 
+      - seedbox
+    volumes:
+      - #seedboxFolder#/config/cloud:/root
+      - #seedboxFolder#/downloads:/mnt/fs
+#cloud_end#
+
  openvpn:
     image: kylemanna/openvpn
     container_name: seedboxdocker_openvpn_1
@@ -180,12 +191,13 @@ services:
 #headphones_end#
 
  filemanager:
-    image: cloneme/filemanager
+    image: funtwo/filemanager:latest-dev
     container_name: seedboxdocker_filemanager_1
     restart: always
     networks: 
       - seedbox
     volumes:
+        - #pwd#/htpasswd.txt:/.userlist:ro
         - #seedboxFolder#/downloads:/downloads
 #The authentification is done on front side.
 #filemanager_end#
