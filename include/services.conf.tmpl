@@ -1,0 +1,61 @@
+#start_root
+    location / {
+        root /var/www;
+        index index.html index.htm;
+
+        #start_glances
+        if ($http_referer ~ "^https?://[^/]+/glances"){
+            rewrite ^/(.*) /glances/$1 redirect;
+        }
+        #end_glances
+
+        #start_rtorrent 
+        if ($http_referer ~ "^https?://[^/]+/rtorrent"){
+            rewrite ^/(.*) /rtorrent/$1 redirect;
+        }
+        #end_rtorrent
+
+        #start_cloud
+        if ($http_referer ~ "^https?://[^/]+/cloud"){
+            rewrite ^/(.*) /cloud/$1 redirect;
+        }
+        #end_cloud
+
+        #start_muximux
+        include auth-basic.conf;
+        include proxy.conf;
+    }
+#end_muximux
+
+#start_glances
+    location /glances/ {
+        include auth-basic.conf;
+        rewrite /glances/(.*) /$1 break;
+        proxy_pass http://seedboxdocker_glances_1:61208/;
+        include proxy.conf;
+    }
+#end_glances
+
+#start_syncthing
+    location /syncthing/ {
+        include auth-basic.conf;
+        proxy_pass http://seedboxdocker_syncthing_1:8384/;
+        include proxy.conf;
+    }
+#end_syncthing
+
+#start_plexpy
+    location /plexpy {
+        include auth-basic.conf;
+        proxy_pass http://seedboxdocker_plexpy_1:8181;
+        include proxy.conf;
+    }
+#end_plexpy
+
+    location /nginx_status {
+        stub_status on;
+        access_log off;
+    }
+
+
+# vim: ft=nginx

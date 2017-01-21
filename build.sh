@@ -13,12 +13,12 @@ EMAIL="seedbox@yopmail.com"
 #see http://php.net/manual/en/timezones.php
 TZ="Europe/Paris"
 #using letsEncrypt, delete subdomains not defined on DNS side
-SUBDOMAINS="files,rtorrent,sickrage,couchpotato,plex,explorer,headphones,media,emby,muximux,glances,syncthing,plexpy,cloud"
+SUBDOMAINS="rtorrent,sickrage,couchpotato,plex,headphones,media,emby,muximux,glances,syncthing,plexpy,cloud"
 
 
 ############### SERVER
 # All servers with the property at true will be deployed.
-fail2ban=f
+fail2ban=true
 
 # https://hub.docker.com/r/timhaak/plex/
 plex=true
@@ -30,7 +30,7 @@ emby=f
 limbomedia=f
 
 sickrage=true
-couchPotato=true
+couchpotato=true
 rtorrent=true
 # https://mondedie.fr/viewtopic.php?id=7475
 # not yet multi users
@@ -44,13 +44,8 @@ openvpn=f
 teamspeak=f
 # https://hub.docker.com/r/stilliard/pure-ftpd/
 pureftpd=true
-# https://github.com/simogeo/Filemanager
-filemanager=f
-# see https://github.com/soyuka/explorer
-# enter : admin/admin then configure and update the home to /torrents
-explorer=f
 
-#Another file explorer http://cloudcmd.io/
+#file explorer http://cloudcmd.io/
 cloud=true
 
 # linuxserver/muximux

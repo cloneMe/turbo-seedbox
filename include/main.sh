@@ -63,14 +63,14 @@ fi
 
 function addProxy_pass {
 local  result="$1"
-result="$result                       if (\$remote_user = \"$4\") {\n"
-result="$result                             proxy_pass http://$2:$3;\n"
-result="$result                            break;\n              }\n"
+result="$result        if (\$remote_user = \"$4\") {\n"
+result="$result          proxy_pass http://$2:$3;\n"
+result="$result        break;\n        }\n"
 echo "$result"
 }
 function addCouchPotato {
 local  result="$1\n"
-result="$result couchPotato_$2:\n"
+result="$result couchpotato_$2:\n"
 result="$result    image: funtwo/couchpotato:latest-dev\n"
 result="$result    container_name: seedboxdocker_couchpotato_$2\n"
 result="$result    restart: always\n"
@@ -93,25 +93,20 @@ function addCustomProviders {
 }
 
 function delete {
-if [ "$2" = "true" ]; then
- sed -i "/#$1_end#/d" docker-compose.yml
- sed -i "/#$1_end#/d" nginx.conf
- echo "       - $1\n"
-else
-#Delete the lines starting from the pattern 'plex' till ,#plex_end#...
+#Delete the lines starting from the pattern 'servicename' till ,#end_servicename#...
+if [ "$2" = "f" ]; then
+  local l=$(grep -n "#start_$1" docker-compose.yml | grep -Eo '^[^:]+' )
+  if [ "$l" != "" ]; then
+   sed -i "$l,/#end_$1/d" docker-compose.yml
+  fi
 
-  local l=$(grep -n " $1:" docker-compose.yml | grep -Eo '^[^:]+' )
-  if [ "$l" = "" ]; then
-   sed -i "/#$1_end#/d" docker-compose.yml
-  else
-   sed -i "$l,/#$1_end#/d" docker-compose.yml
-  fi
-  l=$(grep -n "upstream $1" nginx.conf | grep -Eo '^[^:]+' )
-  if [ "$l" = "" ]; then
-   sed -i "/#$1_end#/d" nginx.conf
-  else
-   sed -i "$l,/#$1_end#/d" nginx.conf
-  fi
+  l=$(grep -n "#start_$1" services.conf | grep -Eo '^[^:]+' | head -1)
+  while [ "$l" != "" ]; do
+    sed -i "$l,/#end_$1/d" services.conf
+    l=$(grep -n "#start_$1" services.conf | grep -Eo '^[^:]+' | head -1)
+  done
+else
+ echo "       - $1\n"
 fi
 }
 
@@ -163,88 +158,76 @@ mkdir -p help
 echo "
 Following services are deployed:
 " > help/URL.txt
-if [ "$filemanager" = "true" ]; then
-   echo "
-File manager
-$httpMode://files.$server_name
-" >> help/URL.txt
-fi
 if [ "$rtorrent" = "true" ]; then
    echo "
 rtorrent
-$httpMode://rtorrent.$server_name
+$httpMode://$server_name/rtorrent
 " >> help/URL.txt
 fi
 if [ "$sickrage" = "true" ]; then
    echo "
 sickrage
-$httpMode://sickrage.$server_name
+$httpMode://$server_name/sickrage
 " >> help/URL.txt
 fi
-if [ "$couchPotato" = "true" ]; then
+if [ "$couchpotato" = "true" ]; then
    echo "
-couchPotato
-$httpMode://couchpotato.$server_name
+couchpotato
+$httpMode://$server_name/couchpotato
 " >> help/URL.txt
 fi
 if [ "$headphones" = "true" ]; then
    echo "
 headphones
-$httpMode://headphones.$server_name
-" >> help/URL.txt
-fi
-if [ "$explorer" = "true" ]; then
-   echo "
-explorer
-$httpMode://explorer.$server_name
+$httpMode://$server_name/headphones
 " >> help/URL.txt
 fi
 if [ "$plex" = "true" ]; then
    echo "
 Plex
-$httpMode://plex.$server_name/web/index.html
+$httpMode://$server_name/plex
 " >> help/URL.txt
 fi
 if [ "$emby" = "true" ]; then
    echo "
 emby
-$httpMode://emby.$server_name
+$httpMode://$server_name/emby
 " >> help/URL.txt
 fi
 if [ "$limbomedia" = "true" ]; then
    echo "
 limbomedia
-$httpMode://media.$server_name
+$httpMode://$server_name/media
 " >> help/URL.txt
 fi
 if [ "$cloud" = "true" ]; then
    echo "
 cloud
-$httpMode://cloud.$server_name
+$httpMode://$server_name/cloud
 " >> help/URL.txt
 fi
 if [ "$pureftpd" = "true" ]; then
    echo "
 muximux
-$httpMode://muximux.$server_name
+$httpMode:/$server_name/muximux
 " >> help/URL.txt
 fi
 if [ "$muximux" = "true" ]; then
    echo "
 glances
-$httpMode://glances.$server_name
+$httpMode://$server_name/glances
 " >> help/URL.txt
 fi
 if [ "$glances" = "true" ]; then
    echo "
 plexpy
-$httpMode://plexpy.$server_name
+$httpMode://$server_name/plexpy
 " >> help/URL.txt
 fi
 if [ "$plexpy" = "true" ]; then
    echo "
 syncthing
-$httpMode://syncthing.$server_name
+$httpMode://$server_name/syncthing
 " >> help/URL.txt
 fi
 if [ "$syncthing" = "true" ]; then
@@ -268,17 +251,17 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
   sickrage_conf=$(addProxy_pass "$sickrage_conf" "seedboxdocker_sickrage" "$web_port" "$userName")
   web_port=$[$web_port+1]
   #CouchPotato
-  if [ "$couchPotato" = "true" ]; then
+  if [ "$couchpotato" = "true" ]; then
     cp_ng_conf=$(addProxy_pass "$cp_ng_conf" "seedboxdocker_couchpotato_$userName" "5050" "$userName")
     cp_dc_conf=$(addCouchPotato "$cp_dc_conf" "$userName")
-    depends_on="$depends_on       - couchPotato_$userName\n"
+    depends_on="$depends_on       - couchpotato_$userName\n"
     addCustomProviders $userName
   fi
   generateHelp "$userName"
 done < "$users"
 generateURL
 
-sed -e 's|#sickrage_conf#|'"$sickrage_conf"'|g' -e 's|#couchpotato_conf#|'"$cp_ng_conf"'|g' -e "s|#server_name#|$server_name|g" ./"$INCLUDE"/nginx.conf.tmpl > ./nginx.conf
+sed -e 's|#sickrage_conf#|'"$sickrage_conf"'|g' -e 's|#couchpotato_conf#|'"$cp_ng_conf"'|g' -e "s|#server_name#|$server_name|g" ./"$INCLUDE"/services.conf.tmpl > ./services.conf
 
 sed -e 's|#couckPotato_conf#|'"$cp_dc_conf"'|g' -e "s|#pwd#|$here|g"  -e "s|#seedboxFolder#|$seedboxFiles|g" -e "s|#server_name#|$server_name|g" ./"$INCLUDE"/docker-compose.yml.tmpl > ./docker-compose.yml
 sed -i 's|#PLEX_USERNAME#|'"$plexUser"'|g' docker-compose.yml
@@ -291,12 +274,10 @@ depends_on="$depends_on$(delete "limbomedia" $limbomedia)"
 depends_on="$depends_on$(delete "sickrage" $sickrage)"
 depends_on="$depends_on$(delete "rtorrent" $rtorrent)"
 depends_on="$depends_on$(delete "headphones" $headphones)"
-delete "couchPotato" $couchPotato > /dev/null
+delete "couchpotato" $couchpotato > /dev/null
 delete "openvpn" $openvpn > /dev/null
 delete "teamspeak" $teamspeak > /dev/null
-depends_on="$depends_on$(delete "explorer" $explorer)"
 delete "pureftpd" $pureftpd > /dev/null
-depends_on="$depends_on$(delete "filemanager" $filemanager)"
 delete "fail2ban" $fail2ban > /dev/null
 depends_on="$depends_on$(delete "cloud" $cloud)"
 depends_on="$depends_on$(delete "syncthing" $syncthing)"

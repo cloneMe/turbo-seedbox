@@ -1,8 +1,8 @@
 [DEFAULT]
 ignoreip = 127.0.0.1/8
-bantime  = 3600
-findtime  = 3600
-maxretry = 3
+bantime  = 1800
+findtime  = 1800
+maxretry = 5
 banaction = docker-action
             iptables-multiport
 
@@ -11,7 +11,7 @@ enabled = true
 port    = ssh
 filter  = sshd
 logpath  = /host/auth.log
-maxretry = 1
+maxretry = 5
 
 [nginx-dos]
 # Based on apache-badbots but a simple IP check (any IP requesting more than
