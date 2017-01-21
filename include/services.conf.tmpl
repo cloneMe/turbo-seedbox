@@ -23,6 +23,88 @@
 
         #start_muximux
         include auth-basic.conf;
+        rewrite ^/(.*) /muximux/$1 redirect;
+        #end_muximux
+    }
+#end_root
+
+#start_rtorrent 
+    location /rtorrent/ {
+        include auth-basic.conf;
+        fastcgi_pass_header Authorization;
+        include /etc/nginx/fastcgi_params;
+        include proxy.conf;
+
+        rewrite /rtorrent/(.*) /$1 break;
+        proxy_pass http://seedboxdocker_rtorrent_1/;
+    }
+#end_rtorrent
+
+#start_sickrage 
+    location /sickrage {
+        include auth-basic.conf;
+        include proxy.conf;
+        #sickrage_conf#
+    }
+#end_sickrage
+
+#start_plex
+    location /web {
+        proxy_pass http://seedboxdocker_plex_1:32400;
+        include proxy.conf;
+    }
+
+    location /plex {
+        proxy_pass http://seedboxdocker_plex_1:32400/web;
+    }
+#end_plex
+
+#start_emby
+    location /emby {
+        include auth-basic.conf;
+        proxy_pass http://emby:8096;
+        include proxy.conf;
+    }
+#end_emby
+
+#start_limbomedia
+    location /limbomedia {
+        include auth-basic.conf;
+        proxy_pass http://limbomedia:8000;
+        include proxy.conf;
+    }
+#end_limbomedia#
+
+#start_cloud
+    location /cloud/ {
+        include auth-basic.conf;
+        rewrite /cloud/(.*) /$1 break;
+        proxy_pass http://cloud:8000/;
+        include proxy.conf;
+    }
+#end_cloud
+
+#start_headphones
+    location /headphones {
+        include auth-basic.conf;
+        proxy_pass http://headphones:8181;
+        include proxy.conf;
+    }
+#end_headphones
+
+#start_couchpotato
+    location /couchpotato {
+        include auth-basic.conf;
+        #couchpotato_conf#
+        include proxy.conf;
+    }
+#end_couchpotato
+
+#start_muximux
+    location /muximux/ {
+        include auth-basic.conf;
+        rewrite /muximux/(.*) /$1 break;
+        proxy_pass http://seedboxdocker_muximux_1/;
         include proxy.conf;
     }
 #end_muximux
