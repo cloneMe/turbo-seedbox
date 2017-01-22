@@ -46,7 +46,7 @@ teamspeak=f
 pureftpd=true
 
 #file explorer http://cloudcmd.io/
-cloud=true
+cloud=f
 
 # linuxserver/muximux
 muximux=true

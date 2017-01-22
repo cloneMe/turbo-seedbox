@@ -79,7 +79,7 @@
     location /cloud/ {
         include auth-basic.conf;
         rewrite /cloud/(.*) /$1 break;
-        proxy_pass http://cloud:8000/;
+        proxy_pass http://seedboxdocker_cloud:8000/;
         include proxy.conf;
     }
 #end_cloud

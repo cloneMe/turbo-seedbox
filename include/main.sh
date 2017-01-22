@@ -139,10 +139,6 @@ It is not necessary to set username & password. Activate \"rtorrent\" and put fo
     Http auth : basic
     Set userName & password
     Download file location: /downloads/rtorrent/$1/film
-
-You can add providers.
-For example, run git clone https://github.com/Snipees/couchpotato.providers.french
-Then copy t411 & cpasbien in $seedboxFiles/config/couchpotato_$1/custom_plugins
   
 Plex
 Issue : Plex NEVER asks for authentication. Everybody can access to it :/
