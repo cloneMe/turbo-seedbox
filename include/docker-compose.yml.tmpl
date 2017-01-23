@@ -262,6 +262,9 @@ services:
     volumes:
       - #seedboxFolder#/config/syncthing:/config
       - #seedboxFolder#/downloads:/storage
+    environment:
+      - PGID=1000
+      - PUID=1000
 #    ports:
 #      - "8384:8384"
 #      - "22000:22000"
