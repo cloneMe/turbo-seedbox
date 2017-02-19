@@ -86,10 +86,16 @@ echo "$result"
 }
 
 function addCustomProviders {
-  git clone --depth=1 https://github.com/djoole/couchpotato.provider.t411.git $tmpFolder/frenchproviders &> /dev/null 
+  echo "addCustomProviders for $1"
   mkdir -p $seedboxFiles/config/couchpotato_$1/custom_plugins
+  #t411
+  git clone --depth=1 https://github.com/djoole/couchpotato.provider.t411.git $tmpFolder/frenchproviders &> /dev/null
   cp -r $tmpFolder/frenchproviders/t411 $seedboxFiles/config/couchpotato_$1/custom_plugins/t411
   rm -rf $tmpFolder/frenchproviders
+  #torrent9
+  git clone --depth=1 https://github.com/TimmyOtool/torrent9 $tmpFolder/torrent9 &> /dev/null
+  cp $tmpFolder/torrent9/*.py $seedboxFiles/config/couchpotato_$1/custom_plugins/torrent9
+  rm -rf $tmpFolder/torrent9
 }
 
 function delete {
