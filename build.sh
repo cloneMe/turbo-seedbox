@@ -13,7 +13,7 @@ EMAIL="seedbox@yopmail.com"
 #see http://php.net/manual/en/timezones.php
 TZ="Europe/Paris"
 #using letsEncrypt, delete subdomains not defined on DNS side
-SUBDOMAINS="rtorrent,sickrage,couchpotato,plex,headphones,media,emby,muximux,glances,syncthing,plexpy,cloud"
+SUBDOMAINS="files,rtorrent,sickrage,couchpotato,plex,explorer,headphones,media,emby,muximux,glances,syncthing,plexpy,cloud"
 
 
 ############### SERVER
@@ -43,22 +43,22 @@ openvpn=f
 # https://hub.docker.com/r/devalx/docker-teamspeak3/
 teamspeak=f
 # https://hub.docker.com/r/stilliard/pure-ftpd/
-pureftpd=true
+pureftpd=f
 
 #file explorer http://cloudcmd.io/
 cloud=f
 
 # linuxserver/muximux
-muximux=true
+muximux=f
 
 # docker.io/nicolargo/glances
-glances=true
+glances=f
 
 # linuxserver/syncthing
-syncthing=true
+syncthing=f
 
 #linuxserver/plexpy
-plexpy=true
+plexpy=f
 
 #END SERVER
 
@@ -74,7 +74,8 @@ headphones_config=""
 here=`pwd`
 # where save following folders: config, downloads, log
 #By default, get the parent directory of current directory
-seedboxFiles="/home/seedbox/seedBoxFiles"
+# another path: "/home/seedbox/seedBoxFiles"
+seedboxFiles="$(dirname "$here")"
 
 
 #launch scripts

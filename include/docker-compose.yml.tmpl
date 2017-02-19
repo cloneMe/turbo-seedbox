@@ -103,7 +103,10 @@ services:
         - PLEX_USERNAME=#PLEX_USERNAME#
         - PLEX_PASSWORD=#PLEX_PASSWORD#
     volumes:
-        - #seedboxFolder#/config/plex:/config
+#Some users have the folliwing issue
+#Error: Unable to set up server: sqlite3_statement_backend::prepare: disk I/O error for SQL: PRAGMA cache_size=4000
+#uncomment the next line to test if it works on your side
+#plex_config#        - #seedboxFolder#/config/plex:/config
         - #seedboxFolder#/downloads/:/data
 #end_plex
 
