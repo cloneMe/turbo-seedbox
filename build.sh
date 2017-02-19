@@ -44,6 +44,11 @@ openvpn=f
 teamspeak=f
 # https://hub.docker.com/r/stilliard/pure-ftpd/
 pureftpd=f
+# https://github.com/simogeo/Filemanager
+filemanager=f
+# see https://github.com/soyuka/explorer
+# enter : admin/admin then configure and update the home to /torrents
+explorer=f
 
 #file explorer http://cloudcmd.io/
 cloud=f

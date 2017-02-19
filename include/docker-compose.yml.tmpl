@@ -148,6 +148,31 @@ services:
       - #seedboxFolder#/downloads:/mnt/fs
 #end_cloud
 
+#start_explorer
+ explorer:
+   image: cloneme/explorer
+   container_name: seedboxdocker_explorer_1
+   restart: always
+   networks:
+      - seedbox
+   volumes:
+       - #seedboxFolder#/config/explorer:/opt/explorer
+       - #seedboxFolder#/downloads:/torrents
+#end_explorer
+
+#start_filemanager
+ filemanager:
+    image: funtwo/filemanager:latest-dev
+    container_name: seedboxdocker_filemanager_1
+    restart: always
+    networks:
+      - seedbox
+    volumes:
+        - #pwd#/htpasswd.txt:/.userlist:ro
+        - #seedboxFolder#/downloads:/downloads
+#The authentification is done on front side.
+#end_filemanager
+
 #start_openvpn
  openvpn:
     image: kylemanna/openvpn
