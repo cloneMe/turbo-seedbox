@@ -1,0 +1,179 @@
+worker_processes auto;
+
+user root root;
+pid /run/nginx.pid;
+
+events {
+    worker_connections 4096;
+    use                epoll;
+    multi_accept       on;
+}
+
+http {
+    sendfile            on;
+    tcp_nopush          on;
+    tcp_nodelay         on;
+    keepalive_timeout   65;
+    types_hash_max_size 2048;
+
+    include      mime.types;
+    default_type application/octet-stream;
+
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers 'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA';
+
+
+    gzip         on;
+    gzip_disable "msie6";
+
+    client_max_body_size 8M;
+
+    server {
+        include common.conf;
+        server_name #server_name#;
+
+        location / {
+            root /var/www;
+        }
+    }
+#start_rtorrent
+	upstream rtorrent {
+        server seedboxdocker_rtorrent_1;
+    }
+	upstream rS {
+        server seedboxdocker_rtorrent_1:443;
+    }
+    server {
+        include common.conf;
+        server_name ~^(rtorrent)(\.\w+)+$;
+
+        location / {
+            fastcgi_pass_header Authorization;
+            include /etc/nginx/fastcgi_params;
+			if ($ssl_protocol = "") {
+				proxy_pass http://rtorrent;
+			} 
+			if ($ssl_protocol != "") {
+			   proxy_pass https://rS;
+			}
+            
+        }
+    }
+#end_rtorrent
+
+#start_sickrage
+    server {
+        include common.conf;
+        server_name ~^(sickrage)(\.\w+)+$;
+
+        auth_basic           "Restricted";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+        location / {
+      #sickrage_conf#
+        }
+    }
+#end_sickrage
+
+#start_plex
+	upstream plex {
+        server seedboxdocker_plex_1:32400;
+    }
+    server {
+        include common.conf;
+        server_name ~^(plex)(\.\w+)+$;
+
+        location / {
+            proxy_pass http://plex;
+        }
+    }
+#end_plex
+#start_emby
+	upstream emby {
+        server emby:8096;
+    }
+    server {
+        include common.conf;
+        server_name ~^(emby)(\.\w+)+$;
+
+        location / {
+            proxy_pass http://emby;
+        }
+    }
+#end_emby
+#start_limbomedia
+	upstream limbomedia {
+        server limbomedia:8000;
+    }
+    server {
+        include common.conf;
+        server_name ~^(media)(\.\w+)+$;
+
+        location / {
+            proxy_pass http://limbomedia;
+        }
+    }
+#end_limbomedia
+#start_headphones
+	upstream headphones {
+        server seedboxdocker_headphones_1:8181;
+    }
+    server {
+        include common.conf;
+        server_name ~^(headphones)(\.\w+)+$;
+        auth_basic           "Restricted";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+        location / {
+            proxy_pass http://headphones;
+        }
+    }
+#end_headphones
+
+#start_couchpotato
+    server {
+        include common.conf;
+        server_name ~^(couchpotato)(\.\w+)+$;
+
+        auth_basic           "Restricted";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+		location / {
+       #couchpotato_conf#
+        }
+    }
+#end_couchpotato
+
+#start_explorer
+	upstream explorer {
+        server seedboxdocker_explorer_1:4859;
+    }
+    server {
+        include common.conf;
+        server_name ~^(explorer)(\.\w+)+$;
+
+        auth_basic           "Restricted";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+        location / {
+            proxy_pass http://explorer;
+        }
+    }
+#end_explorer
+#start_filemanager
+	upstream filemanager {
+        server seedboxdocker_filemanager_1;
+    }
+	server {
+        include common.conf;
+        server_name ~^(files)(\.\w+)+$;
+
+        auth_basic           "Restricted";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+        location / {
+            proxy_pass http://filemanager;
+        }
+    }
+#end_filemanager
+	
+
+}
+
+# vim: ft=nginx

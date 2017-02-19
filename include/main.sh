@@ -106,10 +106,10 @@ if [ "$2" = "f" ]; then
    sed -i "$l,/#end_$1/d" docker-compose.yml
   fi
 
-  l=$(grep -n "#start_$1" services.conf | grep -Eo '^[^:]+' | head -1)
+  l=$(grep -n "#start_$1" nginx.conf | grep -Eo '^[^:]+' | head -1)
   while [ "$l" != "" ]; do
-    sed -i "$l,/#end_$1/d" services.conf
-    l=$(grep -n "#start_$1" services.conf | grep -Eo '^[^:]+' | head -1)
+    sed -i "$l,/#end_$1/d" nginx.conf
+    l=$(grep -n "#start_$1" nginx.conf | grep -Eo '^[^:]+' | head -1)
   done
 else
  echo "       - $1\n"
@@ -263,7 +263,7 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 done < "$users"
 generateURL
 
-sed -e 's|#sickrage_conf#|'"$sickrage_conf"'|g' -e 's|#couchpotato_conf#|'"$cp_ng_conf"'|g' -e "s|#server_name#|$server_name|g" ./"$INCLUDE"/services.conf.tmpl > ./services.conf
+sed -e 's|#sickrage_conf#|'"$sickrage_conf"'|g' -e 's|#couchpotato_conf#|'"$cp_ng_conf"'|g' -e "s|#server_name#|$server_name|g" ./"$INCLUDE"/nginx.conf.tmpl > ./nginx.conf
 
 sed -e 's|#couckPotato_conf#|'"$cp_dc_conf"'|g' -e "s|#pwd#|$here|g"  -e "s|#seedboxFolder#|$seedboxFiles|g" -e "s|#server_name#|$server_name|g" ./"$INCLUDE"/docker-compose.yml.tmpl > ./docker-compose.yml
 sed -i 's|#PLEX_USERNAME#|'"$plexUser"'|g' docker-compose.yml

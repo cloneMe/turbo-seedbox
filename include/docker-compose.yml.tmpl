@@ -1,7 +1,7 @@
 version: '2'
 services:
  frontend:
-    image: funtwo/nginx:latest-dev
+    image: cloneme/nginx
     #build: ../nginx
     container_name: seedboxdocker_front_1
     restart: always
@@ -16,9 +16,10 @@ services:
         - "80:80"
         - "443:443"
     volumes:
+        - #pwd#/ssl:/etc/nginx/ssl/:ro
         - #seedboxFolder#/config:/config
-        - #pwd#/htpasswd.txt:/etc/nginx/htpasswd:ro
-        - #pwd#/services.conf:/etc/nginx/services.conf:ro
+        - #pwd#/htpasswd.txt:/etc/nginx/.htpasswd:ro
+        - #pwd#/nginx.conf:/etc/nginx/nginx.conf:ro
         - #seedboxFolder#/log/nginx-front:/var/log/nginx
 
 #start_rtorrent
