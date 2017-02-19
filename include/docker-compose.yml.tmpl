@@ -271,6 +271,19 @@ services:
 #      - "21027:21027/udp"
 #end_syncthing
 
+#start_portainer
+ portainer:
+    image: portainer/portainer
+    container_name: seedboxdocker_portainer_1
+    restart: always
+    networks: 
+      - seedbox
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+#    ports:
+#      - "9000:9000"
+#end_portainer
+
 networks:
   seedbox:
     driver: bridge

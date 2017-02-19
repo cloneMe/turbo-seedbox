@@ -154,6 +154,12 @@ mkdir -p help
 echo "
 Following services are deployed:
 " > help/URL.txt
+if [ "$portainer" = "true" ]; then
+   echo "
+portainer
+$httpMode://$server_name/portainer
+" >> help/URL.txt
+fi
 if [ "$rtorrent" = "true" ]; then
    echo "
 rtorrent
@@ -280,6 +286,7 @@ depends_on="$depends_on$(delete "syncthing" $syncthing)"
 depends_on="$depends_on$(delete "plexpy" $plexpy)"
 depends_on="$depends_on$(delete "glances" $glances)"
 depends_on="$depends_on$(delete "muximux" $muximux)"
+depends_on="$depends_on$(delete "portainer" $portainer)"
 
 if [ "$depends_on" != "" ]; then
  depends_on="    depends_on: \n$depends_on"
