@@ -56,7 +56,8 @@ services:
     container_name: seedboxdocker_fail2ban
     restart: always
     privileged: true
-    network_mode: "host"
+    networks: 
+      - seedbox
     environment:
         - TIMEZONE=Europe/Paris
     volumes:

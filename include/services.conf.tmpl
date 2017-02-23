@@ -21,6 +21,12 @@
         }
         #end_cloud
 
+        #start_fail2ban
+        if ($http_referer ~ "^https?://[^/]+/fail2web"){
+            rewrite ^/(.*) /fail2web/$1 redirect;
+        }
+        #end_fail2ban
+
         #start_muximux
         include auth-basic.conf;
         rewrite ^/(.*) /muximux/$1 redirect;
@@ -133,6 +139,20 @@
         include proxy.conf;
     }
 #end_plexpy
+
+#start_fail2ban
+    location /fail2web/ {
+      include auth-basic.conf;
+      proxy_pass http://seedboxdocker_fail2ban:80/;
+      include proxy.conf;
+    }
+
+    location /fail2web/api/ {
+       include auth-basic.conf;
+       proxy_pass http://seedboxdocker_fail2ban:80/api/;
+       include proxy.conf;
+    }
+#end_fail2ban
 
 #start_portainer
     location /portainer/ {

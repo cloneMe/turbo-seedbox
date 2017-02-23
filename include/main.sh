@@ -280,13 +280,13 @@ delete "couchpotato" $couchpotato > /dev/null
 delete "openvpn" $openvpn > /dev/null
 delete "teamspeak" $teamspeak > /dev/null
 delete "pureftpd" $pureftpd > /dev/null
-delete "fail2ban" $fail2ban > /dev/null
 depends_on="$depends_on$(delete "cloud" $cloud)"
 depends_on="$depends_on$(delete "syncthing" $syncthing)"
 depends_on="$depends_on$(delete "plexpy" $plexpy)"
 depends_on="$depends_on$(delete "glances" $glances)"
 depends_on="$depends_on$(delete "muximux" $muximux)"
 depends_on="$depends_on$(delete "portainer" $portainer)"
+depends_on="$depends_on$(delete "fail2ban" $fail2ban)"
 
 if [ "$depends_on" != "" ]; then
  depends_on="    depends_on: \n$depends_on"
