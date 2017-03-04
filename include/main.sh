@@ -94,12 +94,14 @@ function addCustomProviders {
   rm -rf $tmpFolder/frenchproviders
   #torrent9
   git clone --depth=1 https://github.com/TimmyOtool/torrent9 $tmpFolder/torrent9 &> /dev/null
+  #git clone --depth=1 https://github.com/TimmyOtool/namer_check $tmpFolder/namer_check &> /dev/null
+  #  docker cp namer_check.py seedboxdocker_couchpotato_fr:/opt/couchpotato/couchpotato/core/helpers/namer_check.py
   cp $tmpFolder/torrent9/*.py $seedboxFiles/config/couchpotato_$1/custom_plugins/torrent9
   rm -rf $tmpFolder/torrent9
 }
 
 function delete {
-#Delete the lines starting from the pattern 'servicename' till ,#end_servicename#...
+#Delete the lines starting from the pattern '#start_servicename' till #end_servicename 
 if [ "$2" = "f" ]; then
   local l=$(grep -n "#start_$1" docker-compose.yml | grep -Eo '^[^:]+' )
   if [ "$l" != "" ]; then
@@ -108,6 +110,7 @@ if [ "$2" = "f" ]; then
 
   l=$(grep -n "#start_$1" nginx.conf | grep -Eo '^[^:]+' | head -1)
   while [ "$l" != "" ]; do
+    # >&2 echo "q"
     sed -i "$l,/#end_$1/d" nginx.conf
     l=$(grep -n "#start_$1" nginx.conf | grep -Eo '^[^:]+' | head -1)
   done
@@ -270,6 +273,7 @@ sed -i 's|#PLEX_USERNAME#|'"$plexUser"'|g' docker-compose.yml
 sed -i 's|#PLEX_PASSWORD#|'"$plexPass"'|g' docker-compose.yml
 
 #Delete undeployed servers
+depends_on="$depends_on$(delete "plexpy" $plexpy)"
 depends_on="$depends_on$(delete "plex" $plex)"
 depends_on="$depends_on$(delete "emby" $emby)"
 depends_on="$depends_on$(delete "limbomedia" $limbomedia)"
@@ -285,7 +289,6 @@ depends_on="$depends_on$(delete "cloud" $cloud)"
 depends_on="$depends_on$(delete "explorer" $explorer)"
 depends_on="$depends_on$(delete "filemanager" $filemanager)"
 depends_on="$depends_on$(delete "syncthing" $syncthing)"
-depends_on="$depends_on$(delete "plexpy" $plexpy)"
 depends_on="$depends_on$(delete "glances" $glances)"
 depends_on="$depends_on$(delete "muximux" $muximux)"
 
