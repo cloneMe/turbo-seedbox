@@ -48,8 +48,8 @@ pureftpd=true
 #file explorer http://cloudcmd.io/
 cloud=f
 
-#another better file explorer https://sprut.io/en/
-sprutio=true
+#another better file explorer https://github.com/Studio-42/elFinder
+elfinder=true
 
 # linuxserver/muximux
 muximux=true

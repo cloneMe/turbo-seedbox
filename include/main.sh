@@ -208,10 +208,10 @@ cloud
 $httpMode://$server_name/cloud
 " >> help/URL.txt
 fi
-if [ "$sprutio" = "true" ]; then
+if [ "$elfinder" = "true" ]; then
    echo "
 cloud
-$httpMode://$server_name/sprutio
+$httpMode://$server_name/elfinder
 " >> help/URL.txt
 fi
 if [ "$pureftpd" = "true" ]; then
@@ -293,7 +293,7 @@ depends_on="$depends_on$(delete "plexpy" $plexpy)"
 depends_on="$depends_on$(delete "glances" $glances)"
 depends_on="$depends_on$(delete "muximux" $muximux)"
 depends_on="$depends_on$(delete "portainer" $portainer)"
-depends_on="$depends_on$(delete "sprutio" $sprutio)"
+depends_on="$depends_on$(delete "elfinder" $elfinder)"
 
 if [ "$depends_on" != "" ]; then
  depends_on="    depends_on: \n$depends_on"

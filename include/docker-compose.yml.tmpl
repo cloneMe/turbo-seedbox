@@ -287,21 +287,18 @@ services:
 #      - "9000:9000"
 #end_portainer
 
-#start_sprutio
- sprutio:
-    image: funtwo/sprutio:master
-    container_name: seedboxdocker_sprutio_1
+#start_elfinder
+ elfinder:
+    image: sebastianhutter/elfinder
+    container_name: seedboxdocker_elfinder_1
     restart: always
-    privileged: true
-    dns: 8.8.8.8 
     networks: 
       - seedbox
+    environment:
+      - ELFINDER_FILES_URI=/elfinder/files
     volumes:
-      - #seedboxFolder#/downloads:/downloads
-      - #seedboxFolder#/log/sprutio:/var/log/sprutio
-#    ports:
-#      - "9443:9443"
-#end_sprutio
+      - #seedboxFolder#:/var/www/html/files
+#end_elfinder
 
 #start_subliminal
  subliminal:
