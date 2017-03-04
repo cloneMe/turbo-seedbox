@@ -223,7 +223,7 @@ services:
 
 #start_glances
  glances:
-    image: docker.io/nicolargo/glances
+    image: funtwo/glances:master
     container_name: seedboxdocker_glances_1
     restart: always
     pid: host
@@ -233,6 +233,9 @@ services:
 #      - "61208:61208"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - #seedboxFolder#/config:/data/config
+      - #seedboxFolder#/downloads:/data/downloads
+      - #seedboxFolder#/log:/data/log
     environment:
       - GLANCES_OPT=-w
 #end_glances
