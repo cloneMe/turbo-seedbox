@@ -31,11 +31,123 @@ http {
 
     server {
         include common.conf;
+		auth_basic           "Restricted";
+        auth_basic_user_file /etc/nginx/.htpasswd;
         server_name #server_name#;
 
         location / {
+			#start_glances
+			if ($http_referer ~ "^https?://[^/]+/glances"){
+				rewrite ^/(.*) /glances/$1 redirect;
+			}
+			#end_glances
+			#start_cloud
+			if ($http_referer ~ "^https?://[^/]+/cloud"){
+				rewrite ^/(.*) /cloud/$1 redirect;
+			}
+			#end_cloud
+
+
             root /var/www;
         }
+
+		#start_rtorrent
+    location /rtorrent/ {
+        fastcgi_pass_header Authorization;
+        include fastcgi_params;
+		include proxy_params;
+
+        rewrite /rtorrent/(.*) /$1 break;
+
+		proxy_pass https://seedboxdocker_rtorrent_1:443;
+
+    }
+#end_rtorrent
+
+#start_sickrage
+    location /sickrage {
+        include proxy_params;
+        #sickrage_conf#
+    }
+#end_sickrage
+
+#start_plex
+    location /web {
+        proxy_pass http://seedboxdocker_plex_1:32400;
+        include proxy_params;
+    }
+
+    location /plex {
+        proxy_pass http://seedboxdocker_plex_1:32400/web;
+    }
+#end_plex
+
+#start_emby
+    location /emby {
+        proxy_pass http://emby;
+        include proxy_params;
+    }
+#end_emby
+
+#start_limbomedia
+    location /limbomedia {
+		include proxy_params;
+        rewrite /limbomedia/(.*) /$1 break;
+        proxy_pass http://limbomedia;
+    }
+#end_limbomedia#
+
+#start_cloud
+    location /cloud/ {
+        rewrite /cloud/(.*) /$1 break;
+        proxy_pass http://seedboxdocker_cloud:8000/;
+        include proxy_params;
+    }
+#end_cloud
+
+#start_headphones
+    location /headphones {
+        proxy_pass http://headphones:8181;
+        include proxy_params;
+    }
+#end_headphones
+
+#start_couchpotato
+    location /couchpotato {
+        #couchpotato_conf#
+        include proxy_params;
+    }
+#end_couchpotato
+
+#start_muximux
+    location /muximux/ {
+        rewrite /muximux/(.*) /$1 break;
+        proxy_pass http://seedboxdocker_muximux_1/;
+        include proxy_params;
+    }
+#end_muximux
+
+#start_glances
+    location /glances/ {
+        rewrite /glances/(.*) /$1 break;
+        proxy_pass http://seedboxdocker_glances_1:61208/;
+        include proxy_params;
+    }
+#end_glances
+
+#start_syncthing
+    location /syncthing/ {
+        proxy_pass http://seedboxdocker_syncthing_1:8384/;
+        include proxy_params;
+    }
+#end_syncthing
+
+#start_plexpy
+    location /plexpy {
+        proxy_pass http://seedboxdocker_plexpy_1:8181;
+        include proxy_params;
+    }
+#end_plexpy
     }
 #start_rtorrent
 	upstream rtorrent {

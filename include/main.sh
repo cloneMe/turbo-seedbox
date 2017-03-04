@@ -87,7 +87,7 @@ echo "$result"
 
 function addCustomProviders {
   echo "addCustomProviders for $1"
-  mkdir -p $seedboxFiles/config/couchpotato_$1/custom_plugins
+  mkdir -p $seedboxFiles/config/couchpotato_$1/custom_plugins/torrent9
   #t411
   git clone --depth=1 https://github.com/djoole/couchpotato.provider.t411.git $tmpFolder/frenchproviders &> /dev/null
   cp -r $tmpFolder/frenchproviders/t411 $seedboxFiles/config/couchpotato_$1/custom_plugins/t411
