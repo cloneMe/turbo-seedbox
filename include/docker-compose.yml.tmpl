@@ -313,6 +313,21 @@ services:
       - #seedboxFolder#/log/subliminal:/var/log/subliminal
 #end_subliminal
 
+#start_butterfly
+ butterfly:
+    image: garland/butterfly
+    container_name: seedboxdocker_butterfly_1
+    restart: always
+    networks: 
+      - seedbox
+    environment:
+      - PORT=57575
+    volumes:
+      - #seedboxFolder#:/data
+#    ports:
+#      - "57575:57575"
+#end_butterfly
+
 networks:
   seedbox:
     driver: bridge

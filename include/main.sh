@@ -294,6 +294,7 @@ depends_on="$depends_on$(delete "glances" $glances)"
 depends_on="$depends_on$(delete "muximux" $muximux)"
 depends_on="$depends_on$(delete "portainer" $portainer)"
 depends_on="$depends_on$(delete "elfinder" $elfinder)"
+depends_on="$depends_on$(delete "butterfly" $butterfly)"
 
 if [ "$depends_on" != "" ]; then
  depends_on="    depends_on: \n$depends_on"

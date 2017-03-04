@@ -69,6 +69,9 @@ portainer=true
 #subliminal subtitle auto download
 subliminal=true
 
+#a web terminal
+butterfly=true
+
 #END SERVER
 
 #set "#" if you have the following Error: 
