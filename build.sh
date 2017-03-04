@@ -53,7 +53,7 @@ explorer=f
 #file explorer http://cloudcmd.io/
 cloud=f
 
-# linuxserver/muximux
+# linuxserver/muximux, will do git clone
 muximux=f
 
 # docker.io/nicolargo/glances
@@ -86,6 +86,15 @@ seedboxFiles="$(dirname "$here")"
 #launch scripts
 INCLUDE="include"
 . "$INCLUDE"/main.sh
+
+read -p "To launch servers, enter y: " response
+if [[ "$response" = "y" || "$response" = "Y" ]]; then
+ #docker-compose up -d
+ read -p "To update couchPotato, sickrage,... enter y: " response
+ if [[ "$response" = "y" || "$response" = "Y" ]]; then
+  . "$INCLUDE"/update.sh
+ fi
+fi
 
 #docker-compose up -d  --remove-orphans
 #docker restart seedboxdocker_front_1

@@ -85,21 +85,6 @@ result="$result        - #seedboxFolder#/downloads/:/torrents\n"
 echo "$result"
 }
 
-function addCustomProviders {
-  echo "addCustomProviders for $1"
-  mkdir -p $seedboxFiles/config/couchpotato_$1/custom_plugins/torrent9
-  #t411
-  git clone --depth=1 https://github.com/djoole/couchpotato.provider.t411.git $tmpFolder/frenchproviders &> /dev/null
-  cp -r $tmpFolder/frenchproviders/t411 $seedboxFiles/config/couchpotato_$1/custom_plugins/t411
-  rm -rf $tmpFolder/frenchproviders
-  #torrent9
-  git clone --depth=1 https://github.com/TimmyOtool/torrent9 $tmpFolder/torrent9 &> /dev/null
-  #git clone --depth=1 https://github.com/TimmyOtool/namer_check $tmpFolder/namer_check &> /dev/null
-  #  docker cp namer_check.py seedboxdocker_couchpotato_fr:/opt/couchpotato/couchpotato/core/helpers/namer_check.py
-  cp $tmpFolder/torrent9/*.py $seedboxFiles/config/couchpotato_$1/custom_plugins/torrent9
-  rm -rf $tmpFolder/torrent9
-}
-
 function delete {
 #Delete the lines starting from the pattern '#start_servicename' till #end_servicename 
 if [ "$2" = "f" ]; then
@@ -260,7 +245,6 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
     cp_ng_conf=$(addProxy_pass "$cp_ng_conf" "seedboxdocker_couchpotato_$userName" "5050" "$userName")
     cp_dc_conf=$(addCouchPotato "$cp_dc_conf" "$userName")
     depends_on="$depends_on       - couchpotato_$userName\n"
-    addCustomProviders $userName
   fi
   generateHelp "$userName"
 done < "$users"
