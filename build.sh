@@ -48,6 +48,9 @@ pureftpd=true
 #file explorer http://cloudcmd.io/
 cloud=f
 
+#another better file explorer https://sprut.io/en/
+sprutio=true
+
 # linuxserver/muximux
 muximux=true
 
@@ -62,6 +65,9 @@ plexpy=true
 
 #docker web ui manager
 portainer=true
+
+#subliminal subtitle auto download
+subliminal=true
 
 #END SERVER
 

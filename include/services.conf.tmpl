@@ -150,6 +150,14 @@
     }
 #end_portainer
 
+#start_sprutio
+    location /sprutio/ {
+        include auth-basic.conf;
+        proxy_pass http://seedboxdocker_sprutio_1:9443/;
+        include proxy.conf;
+    }
+#end_sprutio
+
     location /nginx_status {
         stub_status on;
         access_log off;

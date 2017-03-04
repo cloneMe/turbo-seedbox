@@ -284,6 +284,35 @@ services:
 #      - "9000:9000"
 #end_portainer
 
+#start_sprutio
+ sprutio:
+    image: funtwo/sprutio:master
+    container_name: seedboxdocker_sprutio_1
+    restart: always
+    privileged: true
+    dns: 8.8.8.8 
+    networks: 
+      - seedbox
+    volumes:
+      - #seedboxFolder#/downloads:/downloads
+      - #seedboxFolder#/log/sprutio:/var/log/sprutio
+#    ports:
+#      - "9443:9443"
+#end_sprutio
+
+#start_subliminal
+ subliminal:
+    image: funtwo/subliminal:master
+    container_name: seedboxdocker_subliminal_1
+    restart: always
+    networks: 
+      - seedbox
+    volumes:
+      - #seedboxFolder#/downloads:/downloads
+      - #pwd#/htpasswd.txt:/etc/.htpasswd:ro
+      - #seedboxFolder#/log/subliminal:/var/log/subliminal
+#end_subliminal
+
 networks:
   seedbox:
     driver: bridge
