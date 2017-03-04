@@ -87,3 +87,8 @@ seedboxFiles="$(dirname "$here")"
 INCLUDE="include"
 . "$INCLUDE"/main.sh
 
+#docker-compose up -d  --remove-orphans
+#docker restart seedboxdocker_front_1
+
+#docker-compose down
+
