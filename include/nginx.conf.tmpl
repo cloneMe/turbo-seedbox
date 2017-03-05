@@ -121,7 +121,6 @@ http {
 
 #start_muximux
     location /muximux/ {
-        rewrite /muximux/(.*) /$1 break;
         proxy_pass http://seedboxdocker_muximux_1/;
         include proxy_params;
     }

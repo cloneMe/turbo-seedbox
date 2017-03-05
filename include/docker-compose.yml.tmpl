@@ -246,8 +246,12 @@ services:
     restart: always
     networks: 
       - seedbox
-    volumes:
-      - #seedboxFolder#/config/muximux:/config
+    environment:
+      - TZ=#TZ#
+#      - PGID=1000
+#      - PUID=1000
+#mux_config#    volumes:
+#mux_config#      - #seedboxFolder#/config/muximux:/config
 #end_muximux
 
 #start_glances

@@ -320,6 +320,7 @@ sed -i 's|#frontend_dependencies#|'"$depends_on"'|g' docker-compose.yml
 sed -i "s|#plex_config#|$plex_config|g" docker-compose.yml
 sed -i "s|#emby_config#|$emby_config|g" docker-compose.yml
 sed -i "s|#headphones_config#|$headphones_config|g" docker-compose.yml
+sed -i "s|#mux_config#|$mux_config|g" docker-compose.yml
 
 if [[ "$headphones" = "true" && ! -f $seedboxFiles/config/headphones/headphones.ini ]]; then
  mkdir -p $seedboxFiles/config/headphones

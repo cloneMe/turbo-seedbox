@@ -85,6 +85,7 @@ plex_config=""
 emby_config=""
 #set "#" if you cannot connect to headphones
 headphones_config=""
+mux_config=""
 
 #where find nginx.conf, htpasswd.txt, ...
 here=`pwd`
