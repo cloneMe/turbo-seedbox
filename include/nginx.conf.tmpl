@@ -150,13 +150,13 @@ http {
 #end_plexpy
 #start_portainer
     location /portainer/ {
-      include proxy.conf;
+      include proxy_params;
       proxy_set_header Connection "";
       proxy_pass http://seedboxdocker_portainer_1:9000/;
 
     }
     location /portainer/api/websocket/ {
-      include proxy.conf;
+      include proxy_params;
       proxy_set_header Upgrade $http_upgrade;
       proxy_set_header Connection "upgrade";
       proxy_pass http://seedboxdocker_portainer_1:9000/api/websocket/;
@@ -166,19 +166,19 @@ http {
 
 #start_elfinder
     location /elfinder/ {
-        include auth-basic.conf;
+        
         proxy_pass http://seedboxdocker_elfinder_1/;
-        include proxy.conf;
+        include proxy_params;
     }
 #end_elfinder
 
 #start_butterfly
    location /butterfly {
-    include auth-basic.conf;
+    
     rewrite ^/butterfly/?(.*) /$1 break;
     proxy_pass http://seedboxdocker_butterfly_1:57575;
 
-    include proxy.conf;
+    include proxy_params;
 
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";

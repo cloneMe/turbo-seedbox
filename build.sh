@@ -54,7 +54,7 @@ explorer=f
 #file explorer http://cloudcmd.io/
 cloud=f
 
-<<<<<<< HEAD
+
 #another better file explorer https://github.com/Studio-42/elFinder
 elfinder=true
 

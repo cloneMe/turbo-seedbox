@@ -250,6 +250,12 @@ File manager
 $httpMode://files.$server_name
 " >> help/URL.txt
 fi
+if [ "$butterfly" = "true" ]; then
+   echo "
+Web console
+$httpMode://$server_name/butterfly
+" >> help/URL.txt
+fi
 }
 
 sickrage_conf=""
