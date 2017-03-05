@@ -89,7 +89,7 @@ INCLUDE="include"
 
 read -p "To launch servers, enter y: " response
 if [[ "$response" = "y" || "$response" = "Y" ]]; then
- #docker-compose up -d
+ docker-compose up -d
  read -p "To update couchPotato, sickrage,... enter y: " response
  if [[ "$response" = "y" || "$response" = "Y" ]]; then
   . "$INCLUDE"/update.sh
@@ -99,5 +99,5 @@ fi
 #docker-compose up -d  --remove-orphans
 #docker restart seedboxdocker_front_1
 
-#docker-compose down
+#docker-compose down --remove-orphans
 

@@ -18,8 +18,8 @@ if [ ${here:0:3} = "/C/" ]; then
  seedboxFiles=/c${seedboxFiles:2}
 fi
 
-echo $seedboxFiles
-echo $here
+echo "New folders will be created in $seedboxFiles"
+#echo "$here"
 
 tmpFolder="$here/$INCLUDE/tmp"
 mkdir -p $tmpFolder

@@ -11,9 +11,9 @@ function addCustomProviders {
 restartSick="false"
 if [ "$couchpotato" = "true" ]; then
  echo "downloading customn plugins for couchpotato"
- git clone --depth=1 https://github.com/djoole/couchpotato.provider.t411.git $tmpFolder/frenchproviders &> /dev/null
- git clone --depth=1 https://github.com/TimmyOtool/torrent9 $tmpFolder/torrent9 &> /dev/null
- git clone --depth=1 https://github.com/TimmyOtool/namer_check $tmpFolder/namer_check &> /dev/null
+ git clone --depth=1 https://github.com/djoole/couchpotato.provider.t411.git $tmpFolder/frenchproviders 
+ git clone --depth=1 https://github.com/TimmyOtool/torrent9 $tmpFolder/torrent9 
+ git clone --depth=1 https://github.com/TimmyOtool/namer_check $tmpFolder/namer_check 
 fi
 while IFS='' read -r line || [[ -n "$line" ]]; do
  #echo "Text read from file: $line"
