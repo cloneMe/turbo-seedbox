@@ -25,11 +25,11 @@ fail2ban=true
 plex=true
 plexUser=PlexUser
 plexPass="PlexPass"
-#linuxserver/plexpy
+# Plex Usage tracker https://github.com/linuxserver/docker-plexpy
 plexpy=f
-
+# another home media server https://github.com/MediaBrowser/Emby 
 emby=f
-# login with admin / admin
+# another home media server, http://limbomedia.net/ login: admin / admin
 limbomedia=f
 
 sickrage=true
@@ -39,10 +39,10 @@ rtorrent=true
 # not yet multi users
 headphones=f
 
-# linuxserver/muximux
+# Lightweight portal to your webapps https://github.com/mescon/Muximux
 muximux=true
 
-# docker.io/nicolargo/glances
+# monitoring tool https://nicolargo.github.io/glances/
 glances=f
 
 # https://hub.docker.com/r/kylemanna/openvpn/
@@ -51,8 +51,14 @@ glances=f
 openvpn=f
 # https://hub.docker.com/r/devalx/docker-teamspeak3/
 teamspeak=f
-# https://hub.docker.com/r/stilliard/pure-ftpd/
+
+
+# FTP (not secured?) https://hub.docker.com/r/stilliard/pure-ftpd/
 pureftpd=f
+
+#Best file explorer https://github.com/Studio-42/elFinder
+elfinder=f
+#### others file explorer
 # https://github.com/simogeo/Filemanager
 filemanager=f
 # see https://github.com/soyuka/explorer
@@ -60,11 +66,10 @@ filemanager=f
 explorer=f
 #file explorer http://cloudcmd.io/
 cloud=f
-#another better file explorer https://github.com/Studio-42/elFinder
-elfinder=f
+####
 
 
-# linuxserver/syncthing
+# https://docs.syncthing.net/ https://hub.docker.com/r/linuxserver/syncthing/
 syncthing=f
 
 #docker web ui manager
