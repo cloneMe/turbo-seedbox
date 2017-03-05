@@ -3,7 +3,7 @@
 . "$INCLUDE"/https.sh
 
 ######################################################""
-############# DO NOT UPDATE 
+############# DO NOT UPDATE
 ######################################################""
 users="htpasswd.txt"
 
@@ -18,8 +18,8 @@ if [ ${here:0:3} = "/C/" ]; then
  seedboxFiles=/c${seedboxFiles:2}
 fi
 
-echo $seedboxFiles
-echo $here
+echo "New folders will be created in $seedboxFiles"
+#echo "$here"
 
 tmpFolder="$here/$INCLUDE/tmp"
 mkdir -p $tmpFolder
@@ -56,7 +56,7 @@ if [[ "$openvpn" = "true" && ! -d "$seedboxFiles/config/openvpn" ]]; then
 docker run -v $OVPN_DATA --rm -it kylemanna/openvpn easyrsa build-client-full \$1 nopass
 # Retrieve the client configuration with embedded certificates
 docker run -v $OVPN_DATA --rm kylemanna/openvpn ovpn_getclient \$1 > \$1.ovpn
-" > createVpnFor.sh 
+" > createVpnFor.sh
     chmod +x createVpnFor.sh
 fi
 
@@ -85,25 +85,19 @@ result="$result        - #seedboxFolder#/downloads/:/torrents\n"
 echo "$result"
 }
 
-function addCustomProviders {
-  git clone --depth=1 https://github.com/djoole/couchpotato.provider.t411.git /$tmpFolder/frenchproviders &> /dev/null 
-  mkdir -p $seedboxFiles/config/couchpotato_$1/custom_plugins
-  cp -r /$tmpFolder/frenchproviders/t411 $seedboxFiles/config/couchpotato_$1/custom_plugins/t411
-  rm -rf /$tmpFolder/frenchproviders
-}
-
 function delete {
-#Delete the lines starting from the pattern 'servicename' till ,#end_servicename#...
+#Delete the lines starting from the pattern '#start_servicename' till #end_servicename
 if [ "$2" = "f" ]; then
   local l=$(grep -n "#start_$1" docker-compose.yml | grep -Eo '^[^:]+' )
   if [ "$l" != "" ]; then
    sed -i "$l,/#end_$1/d" docker-compose.yml
   fi
 
-  l=$(grep -n "#start_$1" services.conf | grep -Eo '^[^:]+' | head -1)
+  l=$(grep -n "#start_$1" nginx.conf | grep -Eo '^[^:]+' | head -1)
   while [ "$l" != "" ]; do
-    sed -i "$l,/#end_$1/d" services.conf
-    l=$(grep -n "#start_$1" services.conf | grep -Eo '^[^:]+' | head -1)
+    # >&2 echo "q"
+    sed -i "$l,/#end_$1/d" nginx.conf
+    l=$(grep -n "#start_$1" nginx.conf | grep -Eo '^[^:]+' | head -1)
   done
 else
  echo "       - $1\n"
@@ -139,7 +133,7 @@ It is not necessary to set username & password. Activate \"rtorrent\" and put fo
     Http auth : basic
     Set userName & password
     Download file location: /downloads/rtorrent/$1/film
-  
+
 Plex
 Issue : Plex NEVER asks for authentication. Everybody can access to it :/
 nano $seedboxFiles/config/plex/Library/Application\ Support/Plex\ Media\ Server/Preferences.xml
@@ -214,34 +208,46 @@ cloud
 $httpMode://$server_name/elfinder
 " >> help/URL.txt
 fi
-if [ "$pureftpd" = "true" ]; then
+if [ "$muximux" = "true" ]; then
    echo "
 muximux
 $httpMode:/$server_name/muximux
 " >> help/URL.txt
 fi
-if [ "$muximux" = "true" ]; then
+if [ "$glances" = "true" ]; then
    echo "
 glances
 $httpMode://$server_name/glances
 " >> help/URL.txt
 fi
-if [ "$glances" = "true" ]; then
+if [ "$plexpy" = "true" ]; then
    echo "
 plexpy
 $httpMode://$server_name/plexpy
 " >> help/URL.txt
 fi
-if [ "$plexpy" = "true" ]; then
+if [ "$syncthing" = "true" ]; then
    echo "
 syncthing
 $httpMode://$server_name/syncthing
 " >> help/URL.txt
 fi
-if [ "$syncthing" = "true" ]; then
+if [ "$pureftpd" = "true" ]; then
    echo "
 FTP
 ftp://$server_name
+" >> help/URL.txt
+fi
+if [ "$explorer" = "true" ]; then
+   echo "
+explorer
+$httpMode://explorer.$server_name
+" >> help/URL.txt
+fi
+if [ "$filemanager" = "true" ]; then
+   echo "
+File manager
+$httpMode://files.$server_name
 " >> help/URL.txt
 fi
 }
@@ -263,19 +269,19 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
     cp_ng_conf=$(addProxy_pass "$cp_ng_conf" "seedboxdocker_couchpotato_$userName" "5050" "$userName")
     cp_dc_conf=$(addCouchPotato "$cp_dc_conf" "$userName")
     depends_on="$depends_on       - couchpotato_$userName\n"
-    addCustomProviders $userName
   fi
   generateHelp "$userName"
 done < "$users"
 generateURL
 
-sed -e 's|#sickrage_conf#|'"$sickrage_conf"'|g' -e 's|#couchpotato_conf#|'"$cp_ng_conf"'|g' -e "s|#server_name#|$server_name|g" ./"$INCLUDE"/services.conf.tmpl > ./services.conf
+sed -e 's|#sickrage_conf#|'"$sickrage_conf"'|g' -e 's|#couchpotato_conf#|'"$cp_ng_conf"'|g' -e "s|#server_name#|$server_name|g" ./"$INCLUDE"/nginx.conf.tmpl > ./nginx.conf
 
 sed -e 's|#couckPotato_conf#|'"$cp_dc_conf"'|g' -e "s|#pwd#|$here|g"  -e "s|#seedboxFolder#|$seedboxFiles|g" -e "s|#server_name#|$server_name|g" ./"$INCLUDE"/docker-compose.yml.tmpl > ./docker-compose.yml
 sed -i 's|#PLEX_USERNAME#|'"$plexUser"'|g' docker-compose.yml
 sed -i 's|#PLEX_PASSWORD#|'"$plexPass"'|g' docker-compose.yml
 
 #Delete undeployed servers
+depends_on="$depends_on$(delete "plexpy" $plexpy)"
 depends_on="$depends_on$(delete "plex" $plex)"
 depends_on="$depends_on$(delete "emby" $emby)"
 depends_on="$depends_on$(delete "limbomedia" $limbomedia)"
@@ -288,8 +294,9 @@ delete "teamspeak" $teamspeak > /dev/null
 delete "pureftpd" $pureftpd > /dev/null
 delete "fail2ban" $fail2ban > /dev/null
 depends_on="$depends_on$(delete "cloud" $cloud)"
+depends_on="$depends_on$(delete "explorer" $explorer)"
+depends_on="$depends_on$(delete "filemanager" $filemanager)"
 depends_on="$depends_on$(delete "syncthing" $syncthing)"
-depends_on="$depends_on$(delete "plexpy" $plexpy)"
 depends_on="$depends_on$(delete "glances" $glances)"
 depends_on="$depends_on$(delete "muximux" $muximux)"
 depends_on="$depends_on$(delete "portainer" $portainer)"

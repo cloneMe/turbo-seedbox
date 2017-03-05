@@ -13,7 +13,8 @@ EMAIL="seedbox@yopmail.com"
 #see http://php.net/manual/en/timezones.php
 TZ="Europe/Paris"
 #using letsEncrypt, delete subdomains not defined on DNS side
-SUBDOMAINS="rtorrent,sickrage,couchpotato,plex,headphones,media,emby,muximux,glances,syncthing,plexpy,cloud,portainer"
+SUBDOMAINS="files,rtorrent,sickrage,couchpotato,plex,explorer,headphones,media,emby,muximux,glances,syncthing,plexpy,cloud"
+
 
 
 ############### SERVER
@@ -26,7 +27,7 @@ plexUser=PlexUser
 plexPass="PlexPass"
 
 emby=f
-# login with admin / admin 
+# login with admin / admin
 limbomedia=f
 
 sickrage=true
@@ -37,44 +38,51 @@ rtorrent=true
 headphones=f
 
 # https://hub.docker.com/r/kylemanna/openvpn/
-# createVpnFor.sh will be generated automatically. 
+# createVpnFor.sh will be generated automatically.
 # Run './createVpnFor.sh foo' to create foo.ovpn
 openvpn=f
 # https://hub.docker.com/r/devalx/docker-teamspeak3/
 teamspeak=f
 # https://hub.docker.com/r/stilliard/pure-ftpd/
-pureftpd=true
+pureftpd=f
+# https://github.com/simogeo/Filemanager
+filemanager=f
+# see https://github.com/soyuka/explorer
+# enter : admin/admin then configure and update the home to /torrents
+explorer=f
 
 #file explorer http://cloudcmd.io/
 cloud=f
 
+<<<<<<< HEAD
 #another better file explorer https://github.com/Studio-42/elFinder
 elfinder=true
 
 # linuxserver/muximux
 muximux=true
 
+
 # docker.io/nicolargo/glances
-glances=true
+glances=f
 
 # linuxserver/syncthing
-syncthing=true
+syncthing=f
 
 #linuxserver/plexpy
-plexpy=true
+plexpy=f
 
 #docker web ui manager
-portainer=true
+portainer=f
 
 #subliminal subtitle auto download
-subliminal=true
+subliminal=f
 
 #a web terminal
-butterfly=true
+butterfly=f
 
 #END SERVER
 
-#set "#" if you have the following Error: 
+#set "#" if you have the following Error:
 #Unable to set up server: sqlite3_statement_backend::prepare: disk I/O error for SQL: PRAGMA cache_size=4000
 plex_config=""
 #set "#" if necessary
@@ -86,10 +94,24 @@ headphones_config=""
 here=`pwd`
 # where save following folders: config, downloads, log
 #By default, get the parent directory of current directory
-seedboxFiles="/home/seedbox/seedBoxFiles"
+# another path: "/home/seedbox/seedBoxFiles"
+seedboxFiles="$(dirname "$here")"
 
 
 #launch scripts
 INCLUDE="include"
 . "$INCLUDE"/main.sh
 
+read -p "To launch servers, enter y: " response
+if [[ "$response" = "y" || "$response" = "Y" ]]; then
+ docker-compose up -d
+ read -p "To update couchPotato, sickrage,... enter y: " response
+ if [[ "$response" = "y" || "$response" = "Y" ]]; then
+  . "$INCLUDE"/update.sh
+ fi
+fi
+
+#docker-compose up -d  --remove-orphans
+#docker restart seedboxdocker_front_1
+
+#docker-compose down --remove-orphans
