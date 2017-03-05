@@ -107,7 +107,7 @@ http {
 
 #start_headphones
     location /headphones {
-        proxy_pass http://headphones:8181;
+        proxy_pass http://headphones;
         include proxy_params;
     }
 #end_headphones

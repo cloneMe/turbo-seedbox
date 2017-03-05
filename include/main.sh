@@ -196,34 +196,46 @@ cloud
 $httpMode://$server_name/cloud
 " >> help/URL.txt
 fi
-if [ "$pureftpd" = "true" ]; then
+if [ "$muximux" = "true" ]; then
    echo "
 muximux
 $httpMode:/$server_name/muximux
 " >> help/URL.txt
 fi
-if [ "$muximux" = "true" ]; then
+if [ "$glances" = "true" ]; then
    echo "
 glances
 $httpMode://$server_name/glances
 " >> help/URL.txt
 fi
-if [ "$glances" = "true" ]; then
+if [ "$plexpy" = "true" ]; then
    echo "
 plexpy
 $httpMode://$server_name/plexpy
 " >> help/URL.txt
 fi
-if [ "$plexpy" = "true" ]; then
+if [ "$syncthing" = "true" ]; then
    echo "
 syncthing
 $httpMode://$server_name/syncthing
 " >> help/URL.txt
 fi
-if [ "$syncthing" = "true" ]; then
+if [ "$pureftpd" = "true" ]; then
    echo "
 FTP
 ftp://$server_name
+" >> help/URL.txt
+fi
+if [ "$explorer" = "true" ]; then
+   echo "
+explorer
+$httpMode://explorer.$server_name
+" >> help/URL.txt
+fi
+if [ "$filemanager" = "true" ]; then
+   echo "
+File manager
+$httpMode://files.$server_name
 " >> help/URL.txt
 fi
 }
