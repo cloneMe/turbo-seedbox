@@ -2,7 +2,7 @@
 # MAINTAINER https://github.com/cloneMe
 
 # run "docker-machine ip default" or set your domain name
-server_name=192.168.1.13
+server_name=127.0.0.1
 # (Not yet implemented) letsEncrypt or self or provided
 # letsEncrypt: Let's Encrypt is a free, automated, and open certificate authority brought to you
 # self: generate a self-signed certificate
@@ -25,6 +25,8 @@ fail2ban=true
 plex=true
 plexUser=PlexUser
 plexPass="PlexPass"
+#linuxserver/plexpy
+plexpy=f
 
 emby=f
 # login with admin / admin
@@ -36,6 +38,12 @@ rtorrent=true
 # https://mondedie.fr/viewtopic.php?id=7475
 # not yet multi users
 headphones=f
+
+# linuxserver/muximux
+muximux=true
+
+# docker.io/nicolargo/glances
+glances=f
 
 # https://hub.docker.com/r/kylemanna/openvpn/
 # createVpnFor.sh will be generated automatically.
@@ -50,26 +58,14 @@ filemanager=f
 # see https://github.com/soyuka/explorer
 # enter : admin/admin then configure and update the home to /torrents
 explorer=f
-
 #file explorer http://cloudcmd.io/
 cloud=f
-
-
 #another better file explorer https://github.com/Studio-42/elFinder
-elfinder=true
+elfinder=f
 
-# linuxserver/muximux
-muximux=true
-
-
-# docker.io/nicolargo/glances
-glances=f
 
 # linuxserver/syncthing
 syncthing=f
-
-#linuxserver/plexpy
-plexpy=f
 
 #docker web ui manager
 portainer=f
@@ -111,7 +107,7 @@ if [[ "$response" = "y" || "$response" = "Y" ]]; then
  fi
 fi
 
-#docker-compose up -d  --remove-orphans
-#docker restart seedboxdocker_front_1
-
-#docker-compose down --remove-orphans
+# docker-compose up -d  --remove-orphans
+# docker restart seedboxdocker_front_1
+# stop & remove containers
+# docker-compose down --remove-orphans

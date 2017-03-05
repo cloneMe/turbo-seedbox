@@ -299,6 +299,7 @@ delete "openvpn" $openvpn > /dev/null
 delete "teamspeak" $teamspeak > /dev/null
 delete "pureftpd" $pureftpd > /dev/null
 delete "fail2ban" $fail2ban > /dev/null
+delete "subliminal" $subliminal > /dev/null
 depends_on="$depends_on$(delete "cloud" $cloud)"
 depends_on="$depends_on$(delete "explorer" $explorer)"
 depends_on="$depends_on$(delete "filemanager" $filemanager)"
