@@ -272,8 +272,7 @@ generateURL
 sed -e 's|#sickrage_conf#|'"$sickrage_conf"'|g' -e 's|#couchpotato_conf#|'"$cp_ng_conf"'|g' -e "s|#server_name#|$server_name|g" ./"$INCLUDE"/services.conf.tmpl > ./services.conf
 
 sed -e 's|#couckPotato_conf#|'"$cp_dc_conf"'|g' -e "s|#pwd#|$here|g"  -e "s|#seedboxFolder#|$seedboxFiles|g" -e "s|#server_name#|$server_name|g" ./"$INCLUDE"/docker-compose.yml.tmpl > ./docker-compose.yml
-sed -i 's|#PLEX_USERNAME#|'"$plexUser"'|g' docker-compose.yml
-sed -i 's|#PLEX_PASSWORD#|'"$plexPass"'|g' docker-compose.yml
+sed -i 's|#PLEX_TOKEN#|'"$plexToken"'|g' docker-compose.yml
 
 #Delete undeployed servers
 depends_on="$depends_on$(delete "plex" $plex)"

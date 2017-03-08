@@ -89,7 +89,7 @@ services:
 
 #start_plex
  plex:
-    image: timhaak/plex
+    image: plexinc/pms-docker
     container_name: seedboxdocker_plex_1
     restart: always
     networks: 
@@ -99,9 +99,9 @@ services:
     ports:
         - "32400:32400"
     environment:
+        - TZ=#TZ#
         - VIRTUAL_HOST=plex.dock
-        - PLEX_USERNAME=#PLEX_USERNAME#
-        - PLEX_PASSWORD=#PLEX_PASSWORD#
+        - PLEX_CLAIM=#PLEX_TOKEN#
     volumes:
         - #seedboxFolder#/config/plex:/config
         - #seedboxFolder#/downloads/:/data

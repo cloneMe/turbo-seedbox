@@ -20,10 +20,10 @@ SUBDOMAINS="rtorrent,sickrage,couchpotato,plex,headphones,media,emby,muximux,gla
 # All servers with the property at true will be deployed.
 fail2ban=true
 
-# https://hub.docker.com/r/timhaak/plex/
+# https://github.com/plexinc/pms-docker
+# To get a token, go to https://www.plex.tv/claim
 plex=true
-plexUser=PlexUser
-plexPass="PlexPass"
+plexToken="CLAIM-XXXXXXXXXX"
 
 emby=f
 # login with admin / admin 
