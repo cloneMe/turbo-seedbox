@@ -3,17 +3,19 @@
 
 # run "docker-machine ip default" or set your domain name
 server_name=127.0.0.1
-# (Not yet implemented) letsEncrypt or self or provided
+# Possible value for useHttps: false or letsEncrypt or self or provided
 # letsEncrypt: Let's Encrypt is a free, automated, and open certificate authority brought to you
 # self: generate a self-signed certificate
-# provided: you have to provide following certificates: nginx.crt, nginx.key OR privkey.pem, fullchain.pem, dhparams.pem in the ssl generated folder.
+# provided: you have to provide following certificates: {nginx.crt, nginx.key} OR {privkey.pem, fullchain.pem, dhparams.pem} in the ssl generated folder.
 useHttps=false
 #for https
 EMAIL="seedbox@yopmail.com"
+#warning: using letsEncrypt, all subdomains should be defined on DNS side
+SUBDOMAINS=""
+#SUBDOMAINS="files,explorer"
 #see http://php.net/manual/en/timezones.php
 TZ="Europe/Paris"
-#using letsEncrypt, delete subdomains not defined on DNS side
-SUBDOMAINS="files,rtorrent,sickrage,couchpotato,plex,explorer,headphones,media,emby,muximux,glances,syncthing,plexpy,cloud"
+
 
 
 
@@ -98,6 +100,7 @@ here=`pwd`
 #By default, get the parent directory of current directory
 # another path: "/home/seedbox/seedBoxFiles"
 seedboxFiles="$(dirname "$here")"
+
 
 
 #launch scripts

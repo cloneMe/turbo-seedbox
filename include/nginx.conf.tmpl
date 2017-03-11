@@ -202,103 +202,31 @@ http {
 	upstream rS {
         server seedboxdocker_rtorrent_1:443;
     }
-    server {
-        include common.conf;
-        server_name ~^(rtorrent)(\.\w+)+$;
 
-        location / {
-            fastcgi_pass_header Authorization;
-            include /etc/nginx/fastcgi_params;
-			if ($ssl_protocol = "") {
-				proxy_pass http://rtorrent;
-			}
-			if ($ssl_protocol != "") {
-			   proxy_pass https://rS;
-			}
-
-        }
-    }
 #end_rtorrent
 
-#start_sickrage
-    server {
-        include common.conf;
-        server_name ~^(sickrage)(\.\w+)+$;
 
-        auth_basic           "Restricted";
-        auth_basic_user_file /etc/nginx/.htpasswd;
-        location / {
-      #sickrage_conf#
-        }
-    }
-#end_sickrage
 
-#start_plex
-	upstream plex {
-        server seedboxdocker_plex_1:32400;
-    }
-    server {
-        include common.conf;
-        server_name ~^(plex)(\.\w+)+$;
-
-        location / {
-            proxy_pass http://plex;
-        }
-    }
-#end_plex
 #start_emby
 	upstream emby {
         server emby:8096;
     }
-    server {
-        include common.conf;
-        server_name ~^(emby)(\.\w+)+$;
 
-        location / {
-            proxy_pass http://emby;
-        }
-    }
 #end_emby
 #start_limbomedia
 	upstream limbomedia {
         server limbomedia:8000;
     }
-    server {
-        include common.conf;
-        server_name ~^(media)(\.\w+)+$;
 
-        location / {
-            proxy_pass http://limbomedia;
-        }
-    }
 #end_limbomedia
 #start_headphones
 	upstream headphones {
         server seedboxdocker_headphones_1:8181;
     }
-    server {
-        include common.conf;
-        server_name ~^(headphones)(\.\w+)+$;
-        auth_basic           "Restricted";
-        auth_basic_user_file /etc/nginx/.htpasswd;
-        location / {
-            proxy_pass http://headphones;
-        }
-    }
+
 #end_headphones
 
-#start_couchpotato
-    server {
-        include common.conf;
-        server_name ~^(couchpotato)(\.\w+)+$;
 
-        auth_basic           "Restricted";
-        auth_basic_user_file /etc/nginx/.htpasswd;
-		location / {
-       #couchpotato_conf#
-        }
-    }
-#end_couchpotato
 
 #start_explorer
 	upstream explorer {

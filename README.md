@@ -6,9 +6,12 @@ This project deploys a **multi-users** seedbox, using Docker. It will install do
 - couchpotato: same thing but for films.
 - headphones: same thing but for music.
 - plex, emby and limboserver: to stream videos from your server to your TV or laptop.
+- some monitoring tools: glances, plexPy
+- muximux: Lightweight portal to your webapps https://github.com/mescon/Muximux
 - a VPN server: openVPN.
 - a teamspeak server.
-- a FTP server, a file manager (https://github.com/simogeo/Filemanager), ...
+- a FTP server, some file managers (https://github.com/Studio-42/elFinder), cloud, syncthing, ...
+- portainer, butterfly
 - WARNING: By default, fail2ban is deployed to protect the host. You have only one try to connect using SSH. If you enter an incorrect password, you will be ban during 1 hour. And you have three tries for websites. See include/fail2ban.
 
 
@@ -48,19 +51,29 @@ By default:
  * downloads
  * log
 
+### 1.3 [optional] Configure your DNS
+ Following subdomains can be used: files, explorer. It depends of what you have defined in build.sh.
+ If your DNS handle wildcards, you are lucky.
+ Otherwise, you need to declare each subdomain.
 
 ## 2. Run build.sh
 It will:
 - Install Docker if needed.
 - Generate docker-compose & nginx. These files depend on users in htpasswd.txt. If you add or remove an user, you have to launch ./build.sh again.
+- Launch servers.
+- Update servers' configuration (Sickrage & Couchpotato).
+
+## 3. Server configuration
+**After launching build.sh, a folder named "help" is generated ;)**
+
+Plex
+Issue : Plex NEVER asks for authentication. Everybody can access to it :/
+`nano $seedboxFiles/config/plex/Library/Application\ Support/Plex\ Media\ Server/Preferences.xml`
+There is "Disable Remote Security=1". Changed that 1 to a 0 and restarted my Plex : docker restart seedboxdocker_plex_1
+Src : https://forums.plex.tv/discussion/132399/plex-security-issue
 
 
-## 3. Configure your DNS
-Following subdomains are used: files, rtorrent, sickrage, couchpotato, headphones, explorer, emby, media.
-If your DNS handle wildcards, you are lucky.
-Otherwise, you need to declare each subdomain.
-
-## 4. Launch servers
+## ...
 
 * To start all servers: `docker-compose up -d`. The first time, take a coffee or a beer ;) This step depends of:
 -- your connection, you have to download 1.7G or 3G :/  
@@ -77,20 +90,12 @@ Otherwise, you need to declare each subdomain.
 
 
 ##### To note
-* On http://rtorrent.__your domain.com__, you should have a page displaying "NON". It means that nginx is working.
-* On others pages, you should have a popup asking your login/password.
+* On all pages, you should have a popup asking your login/password.
+* On http://__your domain.com__/couchpotato, if you have a page displaying "NON". It means that nginx is working but your couchpotato server does not have a correct configuration.
 * If after some tries, the popup asking your login/password does not show up, it means you have been banned during one hour :p (set fail2ban to false to authorize brute force attacks ;)
-* If you have "_This site can’t be reached rtorrent.domain.com's server DNS address could not be found. ERR NAME NOT RESOLVED_", please check your DNS configuration OR wait a while.
+* If file=true and you have "_This site can’t be reached files.domain.com's server DNS address could not be found. ERR NAME NOT RESOLVED_", please check your DNS configuration OR wait a while.
 
 
-## 5. Server configuration
-**After launching build.sh, a folder named "help" is generated ;)**
-
-Plex
-Issue : Plex NEVER asks for authentication. Everybody can access to it :/
-`nano $seedboxFiles/config/plex/Library/Application\ Support/Plex\ Media\ Server/Preferences.xml`
-There is "Disable Remote Security=1". Changed that 1 to a 0 and restarted my Plex : docker restart seedboxdocker_plex_1
-Src : https://forums.plex.tv/discussion/132399/plex-security-issue
 
 
 # [For dev]
@@ -101,19 +106,12 @@ Src : https://forums.plex.tv/discussion/132399/plex-security-issue
 And add (if the docker's IP is 192.168.99.100, run "docker-machine ip default" to know it)
 ```
 192.168.99.100 dock
-192.168.99.100 rtorrent.dock
 192.168.99.100 files.dock
-192.168.99.100 plex.dock
-192.168.99.100 sickrage.dock
-192.168.99.100 couchpotato.dock
 192.168.99.100 explorer.dock
 ```
 Then you can access to servers using these urls:
 ```
-http://rtorrent.dock
 http://files.dock
-http://sickrage.dock
-http://couchpotato.dock
 http://explorer.dock
 ```
 ## Linux users
