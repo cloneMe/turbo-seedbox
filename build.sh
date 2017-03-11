@@ -2,18 +2,21 @@
 # MAINTAINER https://github.com/cloneMe
 
 # run "docker-machine ip default" or set your domain name
-server_name=192.168.1.13
-# (Not yet implemented) letsEncrypt or self or provided
+server_name=127.0.0.1
+# Possible value for useHttps: false or letsEncrypt or self or provided
 # letsEncrypt: Let's Encrypt is a free, automated, and open certificate authority brought to you
 # self: generate a self-signed certificate
-# provided: you have to provide following certificates: nginx.crt, nginx.key OR privkey.pem, fullchain.pem, dhparams.pem in the ssl generated folder.
+# provided: you have to provide following certificates: {nginx.crt, nginx.key} OR {privkey.pem, fullchain.pem, dhparams.pem} in the ssl generated folder.
 useHttps=false
 #for https
 EMAIL="seedbox@yopmail.com"
+#warning: using letsEncrypt, all subdomains should be defined on DNS side
+SUBDOMAINS=""
+#SUBDOMAINS="files,explorer"
 #see http://php.net/manual/en/timezones.php
 TZ="Europe/Paris"
-#using letsEncrypt, delete subdomains not defined on DNS side
-SUBDOMAINS="files,rtorrent,sickrage,couchpotato,plex,explorer,headphones,media,emby,muximux,glances,syncthing,plexpy,cloud"
+
+
 
 
 ############### SERVER
@@ -24,9 +27,11 @@ fail2ban=true
 plex=true
 plexUser=PlexUser
 plexPass="PlexPass"
-
+# Plex Usage tracker https://github.com/linuxserver/docker-plexpy
+plexpy=f
+# another home media server https://github.com/MediaBrowser/Emby 
 emby=f
-# login with admin / admin 
+# another home media server, http://limbomedia.net/ login: admin / admin
 limbomedia=f
 
 sickrage=true
@@ -36,44 +41,58 @@ rtorrent=true
 # not yet multi users
 headphones=f
 
+# Lightweight portal to your webapps https://github.com/mescon/Muximux
+muximux=true
+
+# monitoring tool https://nicolargo.github.io/glances/
+glances=f
+
 # https://hub.docker.com/r/kylemanna/openvpn/
-# createVpnFor.sh will be generated automatically. 
+# createVpnFor.sh will be generated automatically.
 # Run './createVpnFor.sh foo' to create foo.ovpn
 openvpn=f
 # https://hub.docker.com/r/devalx/docker-teamspeak3/
 teamspeak=f
-# https://hub.docker.com/r/stilliard/pure-ftpd/
+
+
+# FTP (not secured?) https://hub.docker.com/r/stilliard/pure-ftpd/
 pureftpd=f
+
+#Best file explorer https://github.com/Studio-42/elFinder
+elfinder=f
+#### others file explorer
 # https://github.com/simogeo/Filemanager
 filemanager=f
 # see https://github.com/soyuka/explorer
 # enter : admin/admin then configure and update the home to /torrents
 explorer=f
-
 #file explorer http://cloudcmd.io/
 cloud=f
+####
 
-# linuxserver/muximux, will do git clone
-muximux=f
 
-# docker.io/nicolargo/glances
-glances=f
-
-# linuxserver/syncthing
+# https://docs.syncthing.net/ https://hub.docker.com/r/linuxserver/syncthing/
 syncthing=f
 
-#linuxserver/plexpy
-plexpy=f
+#docker web ui manager
+portainer=f
+
+#subliminal subtitle auto download
+subliminal=f
+
+#a web terminal
+butterfly=f
 
 #END SERVER
 
-#set "#" if you have the following Error: 
+#set "#" if you have the following Error:
 #Unable to set up server: sqlite3_statement_backend::prepare: disk I/O error for SQL: PRAGMA cache_size=4000
 plex_config=""
 #set "#" if necessary
 emby_config=""
 #set "#" if you cannot connect to headphones
 headphones_config=""
+mux_config=""
 
 #where find nginx.conf, htpasswd.txt, ...
 here=`pwd`
@@ -81,6 +100,7 @@ here=`pwd`
 #By default, get the parent directory of current directory
 # another path: "/home/seedbox/seedBoxFiles"
 seedboxFiles="$(dirname "$here")"
+
 
 
 #launch scripts
@@ -96,8 +116,7 @@ if [[ "$response" = "y" || "$response" = "Y" ]]; then
  fi
 fi
 
-#docker-compose up -d  --remove-orphans
-#docker restart seedboxdocker_front_1
-
-#docker-compose down --remove-orphans
-
+# docker-compose up -d  --remove-orphans
+# docker restart seedboxdocker_front_1
+# stop & remove containers
+# docker-compose down --remove-orphans

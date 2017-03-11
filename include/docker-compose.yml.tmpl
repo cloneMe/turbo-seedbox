@@ -246,13 +246,17 @@ services:
     restart: always
     networks: 
       - seedbox
-    volumes:
-      - #seedboxFolder#/config/muximux:/config
+    environment:
+      - TZ=#TZ#
+#      - PGID=1000
+#      - PUID=1000
+#mux_config#    volumes:
+#mux_config#      - #seedboxFolder#/config/muximux:/config
 #end_muximux
 
 #start_glances
  glances:
-    image: docker.io/nicolargo/glances
+    image: funtwo/glances:master
     container_name: seedboxdocker_glances_1
     restart: always
     pid: host
@@ -262,6 +266,9 @@ services:
 #      - "61208:61208"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - #seedboxFolder#/config:/data/config
+      - #seedboxFolder#/downloads:/data/downloads
+      - #seedboxFolder#/log:/data/log
     environment:
       - GLANCES_OPT=-w
 #end_glances
@@ -299,6 +306,60 @@ services:
 #      - "22000:22000"
 #      - "21027:21027/udp"
 #end_syncthing
+
+#start_portainer
+ portainer:
+    image: portainer/portainer
+    container_name: seedboxdocker_portainer_1
+    restart: always
+    networks: 
+      - seedbox
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+#    ports:
+#      - "9000:9000"
+#end_portainer
+
+#start_elfinder
+ elfinder:
+    image: sebastianhutter/elfinder
+    container_name: seedboxdocker_elfinder_1
+    restart: always
+    networks: 
+      - seedbox
+    environment:
+      - ELFINDER_FILES_URI=/elfinder/files
+    volumes:
+      - #seedboxFolder#:/var/www/html/files
+#end_elfinder
+
+#start_subliminal
+ subliminal:
+    image: funtwo/subliminal:master
+    container_name: seedboxdocker_subliminal_1
+    restart: always
+    networks: 
+      - seedbox
+    volumes:
+      - #seedboxFolder#/downloads:/downloads
+      - #pwd#/htpasswd.txt:/etc/.htpasswd:ro
+      - #seedboxFolder#/log/subliminal:/var/log/subliminal
+#end_subliminal
+
+#start_butterfly
+ butterfly:
+    image: garland/butterfly
+    container_name: seedboxdocker_butterfly_1
+    restart: always
+    networks: 
+      - seedbox
+    environment:
+      - PORT=57575
+    volumes:
+      - #seedboxFolder#:/data
+#    ports:
+#      - "57575:57575"
+#end_butterfly
 
 networks:
   seedbox:

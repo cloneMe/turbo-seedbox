@@ -3,7 +3,7 @@
 . "$INCLUDE"/https.sh
 
 ######################################################""
-############# DO NOT UPDATE 
+############# DO NOT UPDATE
 ######################################################""
 users="htpasswd.txt"
 
@@ -56,7 +56,7 @@ if [[ "$openvpn" = "true" && ! -d "$seedboxFiles/config/openvpn" ]]; then
 docker run -v $OVPN_DATA --rm -it kylemanna/openvpn easyrsa build-client-full \$1 nopass
 # Retrieve the client configuration with embedded certificates
 docker run -v $OVPN_DATA --rm kylemanna/openvpn ovpn_getclient \$1 > \$1.ovpn
-" > createVpnFor.sh 
+" > createVpnFor.sh
     chmod +x createVpnFor.sh
 fi
 
@@ -86,7 +86,7 @@ echo "$result"
 }
 
 function delete {
-#Delete the lines starting from the pattern '#start_servicename' till #end_servicename 
+#Delete the lines starting from the pattern '#start_servicename' till #end_servicename
 if [ "$2" = "f" ]; then
   local l=$(grep -n "#start_$1" docker-compose.yml | grep -Eo '^[^:]+' )
   if [ "$l" != "" ]; then
@@ -133,7 +133,7 @@ It is not necessary to set username & password. Activate \"rtorrent\" and put fo
     Http auth : basic
     Set userName & password
     Download file location: /downloads/rtorrent/$1/film
-  
+
 Plex
 Issue : Plex NEVER asks for authentication. Everybody can access to it :/
 nano $seedboxFiles/config/plex/Library/Application\ Support/Plex\ Media\ Server/Preferences.xml
@@ -148,6 +148,12 @@ mkdir -p help
 echo "
 Following services are deployed:
 " > help/URL.txt
+if [ "$portainer" = "true" ]; then
+   echo "
+portainer
+$httpMode://$server_name/portainer
+" >> help/URL.txt
+fi
 if [ "$rtorrent" = "true" ]; then
    echo "
 rtorrent
@@ -196,6 +202,12 @@ cloud
 $httpMode://$server_name/cloud
 " >> help/URL.txt
 fi
+if [ "$elfinder" = "true" ]; then
+   echo "
+cloud
+$httpMode://$server_name/elfinder
+" >> help/URL.txt
+fi
 if [ "$muximux" = "true" ]; then
    echo "
 muximux
@@ -236,6 +248,12 @@ if [ "$filemanager" = "true" ]; then
    echo "
 File manager
 $httpMode://files.$server_name
+" >> help/URL.txt
+fi
+if [ "$butterfly" = "true" ]; then
+   echo "
+Web console
+$httpMode://$server_name/butterfly
 " >> help/URL.txt
 fi
 }
@@ -281,12 +299,16 @@ delete "openvpn" $openvpn > /dev/null
 delete "teamspeak" $teamspeak > /dev/null
 delete "pureftpd" $pureftpd > /dev/null
 delete "fail2ban" $fail2ban > /dev/null
+delete "subliminal" $subliminal > /dev/null
 depends_on="$depends_on$(delete "cloud" $cloud)"
 depends_on="$depends_on$(delete "explorer" $explorer)"
 depends_on="$depends_on$(delete "filemanager" $filemanager)"
 depends_on="$depends_on$(delete "syncthing" $syncthing)"
 depends_on="$depends_on$(delete "glances" $glances)"
 depends_on="$depends_on$(delete "muximux" $muximux)"
+depends_on="$depends_on$(delete "portainer" $portainer)"
+depends_on="$depends_on$(delete "elfinder" $elfinder)"
+depends_on="$depends_on$(delete "butterfly" $butterfly)"
 
 if [ "$depends_on" != "" ]; then
  depends_on="    depends_on: \n$depends_on"
@@ -298,6 +320,7 @@ sed -i 's|#frontend_dependencies#|'"$depends_on"'|g' docker-compose.yml
 sed -i "s|#plex_config#|$plex_config|g" docker-compose.yml
 sed -i "s|#emby_config#|$emby_config|g" docker-compose.yml
 sed -i "s|#headphones_config#|$headphones_config|g" docker-compose.yml
+sed -i "s|#mux_config#|$mux_config|g" docker-compose.yml
 
 if [[ "$headphones" = "true" && ! -f $seedboxFiles/config/headphones/headphones.ini ]]; then
  mkdir -p $seedboxFiles/config/headphones
