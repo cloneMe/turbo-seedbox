@@ -33,6 +33,7 @@ docker run -i --rm \
     -p 80:80 -p 443:443 \
     xataz/letsencrypt \
         certonly --non-interactive --renew-by-default --standalone --standalone-supported-challenges tls-sni-01 --rsa-key-size 4096 --email $EMAIL --agree-tos -d $URL $SUBDOMAINS2
-cp $tmpFolder/letsencrypt/live/$URL/* $sslFolder
+# ex: $tmpFolder/letsencrypt/live/$URL-001/*
+cp $tmpFolder/letsencrypt/live/$URL*/* $sslFolder
 echo "Restarting web server"
 docker start seedboxdocker_front_1
