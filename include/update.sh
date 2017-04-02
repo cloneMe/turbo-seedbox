@@ -8,6 +8,31 @@ function addCustomProviders {
   cp $tmpFolder/torrent9/*.py $seedboxFiles/config/couchpotato_$1/custom_plugins/torrent9
   
 }
+if [ "$jackett" = "true" ]; then
+ url="$(grep BasePathOverride $seedboxFiles/config/jackett/Jackett/ServerConfig.json)"
+ if [ "$url" != '  "BasePathOverride": "/jackett"' ]; then
+   sed -i 's|'"$url"'|  "BasePathOverride": "/jackett"|g' $seedboxFiles/config/jackett/Jackett/ServerConfig.json
+  fi
+fi
+if [ "$mylar" = "true" ]; then
+ url="$(grep http_root $seedboxFiles/config/mylar/mylar/config.ini)"
+ if [ "$url" != "http_root = /mylar" ]; then
+   sed -i 's|'"$url"'|http_root = /mylar|g' $seedboxFiles/config/mylar/mylar/config.ini
+  fi
+fi
+if [ "$radarr" = "true" ]; then
+ url="$(grep UrlBase $seedboxFiles/config/radar/config.xml)"
+ if [ "$url" != "  <UrlBase>/radarr</UrlBase>" ]; then
+   sed -i 's|'"$url"'|  <UrlBase>/radarr</UrlBase>|g' $seedboxFiles/config/radar/config.xml
+  fi
+fi
+if [ "$ubooquity" = "true" ]; then
+ url="$(grep reverseProxyPrefix $seedboxFiles/config/ubooquity/preference.xml)"
+ if [ "$url" != "    <reverseProxyPrefix>/ubooquity</reverseProxyPrefix>" ]; then
+   sed -i 's|'"$url"'|    <reverseProxyPrefix>/ubooquity</reverseProxyPrefix>|g' $seedboxFiles/config/ubooquity/preference.xml
+  fi
+fi
+
 restartSick="false"
 if [ "$couchpotato" = "true" ]; then
  echo "downloading customn plugins for couchpotato"

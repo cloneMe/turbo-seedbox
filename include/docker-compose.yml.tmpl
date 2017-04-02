@@ -84,6 +84,42 @@ services:
         - #seedboxFolder#/downloads/:/torrents
 #end_sickrage
 
+#start_radarr
+ radarr:
+    image: linuxserver/radarr
+    container_name: autodl-movies_radarr
+    restart: always
+    networks: 
+      - seedbox
+    volumes:
+     - #seedboxFolder#/config/radarr:/config
+     - #seedboxFolder#/downloads:/downloads
+     - #seedboxFolder#/downloads:/movies
+    environment:
+      - TZ=#TZ#
+#      - PUID=1069
+#      - PGID=1069
+#end_radarr
+
+#start_mylar
+ mylar:
+    image: linuxserver/mylar
+    container_name: autodl-comics_mylar
+    restart: always
+    hostname: mylar
+    networks: 
+      - seedbox
+    volumes:
+      - #seedboxFolder#/config/mylar:/config
+      - #seedboxFolder#/downloads/BDINC:/downloads
+      - #seedboxFolder#/downloads/BDS:/comics
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - TZ=#TZ#
+#      - PUID=1069
+#      - PGID=1069
+#end_mylar
+
 #start_couchpotato
  #couckPotato_conf#
 #end_couchpotato
@@ -136,6 +172,63 @@ services:
     volumes:
         - #seedboxFolder#/downloads/:/data
 #end_limbomedia
+
+#start_libresonic
+ libresonic:
+    restart: always
+    image: linuxserver/libresonic
+    container_name: stream-music_libresonic
+    hostname: libresonic
+    networks: 
+      - seedbox
+    volumes:
+      - #seedboxFolder#/downloads:/music:ro
+      - #seedboxFolder#/downloads:/podcasts:ro
+      - #seedboxFolder#/downloads:/playlists:ro
+      - #seedboxFolder#/downloads:/media:ro
+#mux_config#      - #seedboxFolder#/config/libresonic:/config:rw
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - CONTEXT_PATH=/libresonic
+      - SSL=no
+      - TERM=xterm
+#      - PGID=1069
+#      - PUID=1069
+#end_libresonic
+
+#start_ubooquity
+ ubooquity:
+    restart: always
+    image: cromigon/ubooquity
+    container_name: stream-comics_ubooquity
+    hostname: library
+    networks: 
+      - seedbox
+    volumes:
+      - #seedboxFolder#/downloads/LIBRARY:/opt/data:ro
+#mux_config#      - #seedboxFolder#/config/ubooquity:/opt/ubooquity-data:rw
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - TZ=#TZ#
+#      - PUID=1069
+#      - PGID=1069
+#end_ubooquity
+
+#start_jackett
+ jackett:
+    restart: always
+    image: linuxserver/jackett
+    container_name: jackett
+    networks: 
+      - seedbox
+    volumes:
+      - #seedboxFolder#/downloads/blackhole:/downloads
+#mux_config#      - #seedboxFolder#/config/jackett:/config
+    environment:
+      - TZ=#TZ#
+#      - PUID=1069
+#      - PGID=1069
+#end_jackett
 
 #start_cloud
  cloud:
@@ -254,6 +347,21 @@ services:
 #mux_config#      - #seedboxFolder#/config/muximux:/config
 #end_muximux
 
+#start_htpcmanager
+ htpcmanager:
+    image: linuxserver/htpcmanager
+    container_name: tool_HTPCManager
+#mux_config#    volumes:
+#mux_config#     - #seedboxFolder#/config/htpcmanager:/config
+    restart: always
+    networks: 
+      - seedbox
+    environment:
+      - TZ=#TZ#
+#      - PUID=1069
+#      - PGID=1069
+#end_htpcmanager
+
 #start_glances
  glances:
     image: funtwo/glances:master
@@ -319,6 +427,19 @@ services:
 #    ports:
 #      - "9000:9000"
 #end_portainer
+
+#start_watchtower
+ watchtower:
+    image: v2tec/watchtower
+    container_name: tool-docker_watchtower
+    hostname: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime:ro
+    restart: always
+    environment:
+      - TZ=#TZ#
+#end_watchtower
 
 #start_elfinder
  elfinder:

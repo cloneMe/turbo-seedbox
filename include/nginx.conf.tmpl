@@ -71,6 +71,8 @@ http {
     }
 #end_sickrage
 
+
+
 #start_plex
     location /web {
         proxy_pass http://seedboxdocker_plex_1:32400;
@@ -147,6 +149,49 @@ http {
         include proxy_params;
     }
 #end_plexpy
+
+#start_jackett
+    location /jackett {
+        proxy_pass http://jackett:9117;
+        include proxy_params;
+    }
+#end_jackett
+
+#start_htpcmanager
+    location /htpcmanager {
+        proxy_pass http://tool_HTPCManager:8085;
+        include proxy_params;
+    }
+#end_htpcmanager
+
+#start_mylar
+    location /mylar {
+        proxy_pass http://autodl-comics_mylar:8090;
+        include proxy_params;
+    }
+#end_mylar
+
+#start_radarr
+    location /radarr {
+        proxy_pass http://autodl-movies_radarr:7878;
+        include proxy_params;
+    }
+#end_radarr
+
+#start_ubooquity
+    location /ubooquity {
+        proxy_pass http://stream-comics_ubooquity:2202;
+        include proxy_params;
+    }
+#end_ubooquity
+
+#start_libresonic
+    location /libresonic {
+        proxy_pass http://stream-music_libresonic:4040;
+        include proxy_params;
+    }
+#end_libresonic
+
 #start_portainer
     location /portainer/ {
       include proxy_params;

@@ -21,8 +21,10 @@ TZ="Europe/Paris"
 
 ############### SERVER
 # All servers with the property at true will be deployed.
+# fail2ban will protect apps and the host from hackers and robots
 fail2ban=true
 
+#plex, emby and limbomedia will stream film, series, ... (like Youtube)
 # https://hub.docker.com/r/timhaak/plex/
 plex=true
 plexUser=PlexUser
@@ -33,16 +35,34 @@ plexpy=f
 emby=f
 # another home media server, http://limbomedia.net/ login: admin / admin
 limbomedia=f
+# Music streaming platform  https://github.com/Libresonic/libresonic
+libresonic=f
+# Comics streaming platform, https://vaemendis.net/ubooquity/
+ubooquity=f
 
+
+# sickrage will download series
 sickrage=true
+# couchPotato and radarr will download films, choose one of them
 couchpotato=true
-rtorrent=true
-# https://mondedie.fr/viewtopic.php?id=7475
+radarr=false
+# Automated comic book (cbr/cbz) downloader, https://github.com/evilhero/mylar
+mylar=false
+# to download music, https://github.com/rembo10/headphones, https://mondedie.fr/viewtopic.php?id=7475
 # not yet multi users
 headphones=f
 
+# jackett: Jackett works as a proxy server: it translates queries from apps (Sonarr, SickRage, CouchPotato, Mylar, etc) into tracker-site-specific http queries
+# https://github.com/Jackett/Jackett
+jackett=true
+# to download torrent
+rtorrent=true
+
+# muximux or htpc will be your Home page (soon)
 # Lightweight portal to your webapps https://github.com/mescon/Muximux
 muximux=true
+# https://github.com/Hellowlol/HTPC-Manager
+htpcmanager=false
 
 # monitoring tool https://nicolargo.github.io/glances/
 glances=f
@@ -71,11 +91,13 @@ cloud=f
 ####
 
 
-# https://docs.syncthing.net/ https://hub.docker.com/r/linuxserver/syncthing/
+# Multiple devices syncronisation tool https://docs.syncthing.net/ https://hub.docker.com/r/linuxserver/syncthing/
 syncthing=f
 
-#docker web ui manager
+#docker web ui manager, https://github.com/portainer/portainer
 portainer=f
+# docker tool that check and update others containers automaticaly. https://github.com/v2tec/watchtower
+watchtower=f
 
 #subliminal subtitle auto download
 subliminal=f

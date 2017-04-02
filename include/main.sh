@@ -87,7 +87,7 @@ echo "$result"
 
 function delete {
 #Delete the lines starting from the pattern '#start_servicename' till #end_servicename
-if [ "$2" = "f" ]; then
+if [ "$2" != "true" ]; then
   local l=$(grep -n "#start_$1" docker-compose.yml | grep -Eo '^[^:]+' )
   if [ "$l" != "" ]; then
    sed -i "$l,/#end_$1/d" docker-compose.yml
@@ -160,6 +160,12 @@ rtorrent
 $httpMode://$server_name/rtorrent
 " >> help/URL.txt
 fi
+if [ "$jackett" = "true" ]; then
+   echo "
+jackett
+$httpMode://$server_name/jackett/
+" >> help/URL.txt
+fi
 if [ "$sickrage" = "true" ]; then
    echo "
 sickrage
@@ -172,6 +178,19 @@ couchpotato
 $httpMode://$server_name/couchpotato
 " >> help/URL.txt
 fi
+if [ "$radarr" = "true" ]; then
+   echo "
+radarr
+$httpMode://$server_name/radarr
+" >> help/URL.txt
+fi
+if [ "$mylar" = "true" ]; then
+   echo "
+mylar
+$httpMode://$server_name/mylar
+" >> help/URL.txt
+fi
+
 if [ "$headphones" = "true" ]; then
    echo "
 headphones
@@ -182,6 +201,18 @@ if [ "$plex" = "true" ]; then
    echo "
 Plex
 $httpMode://$server_name/plex
+" >> help/URL.txt
+fi
+if [ "$libresonic" = "true" ]; then
+   echo "
+libresonic
+$httpMode://$server_name/libresonic
+" >> help/URL.txt
+fi
+if [ "$ubooquity" = "true" ]; then
+   echo "
+ubooquity
+$httpMode://$server_name/ubooquity
 " >> help/URL.txt
 fi
 if [ "$emby" = "true" ]; then
@@ -212,6 +243,12 @@ if [ "$muximux" = "true" ]; then
    echo "
 muximux
 $httpMode:/$server_name/muximux
+" >> help/URL.txt
+fi
+if [ "$htpcmanager" = "true" ]; then
+   echo "
+htpcmanager
+$httpMode:/$server_name/htpcmanager
 " >> help/URL.txt
 fi
 if [ "$glances" = "true" ]; then
@@ -256,6 +293,12 @@ Web console
 $httpMode://$server_name/butterfly
 " >> help/URL.txt
 fi
+
+echo "
+Hosting info (does not work with all hosting)
+http://$(hostname -f)
+" >> help/URL.txt
+
 }
 
 sickrage_conf=""
@@ -291,8 +334,13 @@ depends_on="$depends_on$(delete "plexpy" $plexpy)"
 depends_on="$depends_on$(delete "plex" $plex)"
 depends_on="$depends_on$(delete "emby" $emby)"
 depends_on="$depends_on$(delete "limbomedia" $limbomedia)"
+depends_on="$depends_on$(delete "libresonic" $libresonic)"
+depends_on="$depends_on$(delete "ubooquity" $ubooquity)"
 depends_on="$depends_on$(delete "sickrage" $sickrage)"
+depends_on="$depends_on$(delete "radarr" $radarr)"
+depends_on="$depends_on$(delete "mylar" $mylar)"
 depends_on="$depends_on$(delete "rtorrent" $rtorrent)"
+depends_on="$depends_on$(delete "jackett" $jackett)"
 depends_on="$depends_on$(delete "headphones" $headphones)"
 delete "couchpotato" $couchpotato > /dev/null
 delete "openvpn" $openvpn > /dev/null
@@ -306,7 +354,9 @@ depends_on="$depends_on$(delete "filemanager" $filemanager)"
 depends_on="$depends_on$(delete "syncthing" $syncthing)"
 depends_on="$depends_on$(delete "glances" $glances)"
 depends_on="$depends_on$(delete "muximux" $muximux)"
+depends_on="$depends_on$(delete "htpcmanager" $htpcmanager)"
 depends_on="$depends_on$(delete "portainer" $portainer)"
+depends_on="$depends_on$(delete "watchtower" $watchtower)"
 depends_on="$depends_on$(delete "elfinder" $elfinder)"
 depends_on="$depends_on$(delete "butterfly" $butterfly)"
 
