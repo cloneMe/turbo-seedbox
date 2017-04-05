@@ -140,6 +140,17 @@ nano $seedboxFiles/config/plex/Library/Application\ Support/Plex\ Media\ Server/
 There is \"Disable Remote Security=1\". Changed that 1 to a 0 and restarted my Plex : docker restart seedboxdocker_plex_1
 Src : https://forums.plex.tv/discussion/132399/plex-security-issue
 
+
+To configure ubooquity,
+execute:
+docker stop stream-comics_ubooquity
+docker run --rm -ti -v $seedboxFiles/config/ubooquity:/opt/ubooquity-data:rw -v $seedboxFiles/downloads/LIBRARY:/opt/data -p 2203:2202 cromigon/ubooquity:latest -webadmin
+Then open http://$server_name:2203/ubooquity/admin
+And the end, execute following command to restart ubooquity:
+docker start stream-comics_ubooquity
+
+See https://github.com/cromigon/ubooquity-docker for more information
+
 " > help/$1.txt
 }
 
@@ -207,6 +218,8 @@ if [ "$libresonic" = "true" ]; then
    echo "
 libresonic
 $httpMode://$server_name/libresonic
+Warning: Default user/pass is admin/admin
+
 " >> help/URL.txt
 fi
 if [ "$ubooquity" = "true" ]; then
@@ -384,3 +397,5 @@ if [ ! -f /var/log/auth.log ]; then
  touch $tmpFolder/auth.log
  sed -i 's|/var/log:/host|'"$tmpFolder"':/host|g' docker-compose.yml
 fi
+
+

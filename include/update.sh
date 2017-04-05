@@ -28,8 +28,8 @@ if [ "$radarr" = "true" ]; then
 fi
 if [ "$ubooquity" = "true" ]; then
  url="$(grep reverseProxyPrefix $seedboxFiles/config/ubooquity/preference.xml)"
- if [ "$url" != "    <reverseProxyPrefix>/ubooquity</reverseProxyPrefix>" ]; then
-   sed -i 's|'"$url"'|    <reverseProxyPrefix>/ubooquity</reverseProxyPrefix>|g' $seedboxFiles/config/ubooquity/preference.xml
+ if [ "$url" != "    <reverseProxyPrefix>ubooquity</reverseProxyPrefix>" ]; then
+   sed -i 's|'"$url"'|    <reverseProxyPrefix>ubooquity</reverseProxyPrefix>|g' $seedboxFiles/config/ubooquity/preference.xml
   fi
 fi
 

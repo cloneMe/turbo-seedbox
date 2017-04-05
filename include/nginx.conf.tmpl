@@ -158,7 +158,7 @@ http {
 #end_jackett
 
 #start_htpcmanager
-    location /htpcmanager {
+    location /htpc {
         proxy_pass http://tool_HTPCManager:8085;
         include proxy_params;
     }
