@@ -50,7 +50,11 @@ mkdir -p help
 userUp=$(echo "$1" | tr '[:lower:]' '[:upper:]')
 
 echo "
-5.1 Sickrage
+
+-- Jackett
+Open Jackett and click on \"+ Add indexer\"
+
+-- Sickrage
 
 Open \"Search Settings\" and click on the \"torrent search\" tab. Choose \"rtorrent\" and put following values:
 
@@ -59,13 +63,24 @@ Open \"Search Settings\" and click on the \"torrent search\" tab. Choose \"rtorr
     Set userName & password
     Download file location: /downloads/rtorrent/$1/watch
 
+On \"Search Settings\", click on \"NZB search\" tab and Enable NZB search provider.
+On \"Search Providers\", click on \"Configure custom Newznab Providers\" tab and put following values:
+    Select provider: --add new provider --
+    Provider name: jackett-<tracker>
+    Site URL: http://jackett:9117/jackett/torznab/<tracker>/
+    Set the API key.
+
+On \"Search Providers\", click on \"Provider priorities\" tab and Select jackett-<tracker>.
+On \"Search Providers\", click on \"Provider Options\" tab and Select \"Enable daily searches\", ...
+
+
 Open the \"Post Processing\" menu, activate it and set following values:
     /downloads/rtorrent/$1/watch
     Processing Method: hard link
 
 When adding a a new serie, set /downloads/rtorrent/$1/serie as the parent folder (step 2).
 
-5.2 Couchpotato
+-- Couchpotato
 
 It is not necessary to set username & password. Activate \"rtorrent\" and put following values:
 
@@ -75,15 +90,22 @@ It is not necessary to set username & password. Activate \"rtorrent\" and put fo
     Set userName & password
     Download file location: /downloads/rtorrent/$1/film
 
-Plex
+
+In Settings > Searcher, activate TorrentPotato and put following values:
+   host: http://jackett:9117/jackett/potato/<tracker>
+   For the Passkey use the API key
+   Leave the username field blank.
+And Check the combo box ! (otherwise it will not work )
+
+-- Plex
 Issue : Plex NEVER asks for authentication. Everybody can access to it :/
 nano $seedboxFiles/config/plex/Library/Application\ Support/Plex\ Media\ Server/Preferences.xml
 There is \"Disable Remote Security=1\". Changed that 1 to a 0 and restarted my Plex : docker restart seedboxdocker_plex_1
 Src : https://forums.plex.tv/discussion/132399/plex-security-issue
 
 
-To configure ubooquity,
-execute:
+-- To configure ubooquity,
+Execute:
 docker stop stream-comics_ubooquity
 docker run --rm -ti -v $seedboxFiles/config/ubooquity:/opt/ubooquity-data:rw -v $seedboxFiles/downloads/LIBRARY:/opt/data -p 2203:2202 cromigon/ubooquity:latest -webadmin
 Then open http://$server_name:2203/ubooquity/admin
