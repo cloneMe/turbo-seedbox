@@ -120,9 +120,9 @@ mux_config=""
 here=`pwd`
 # where save following folders: config, downloads, log
 #By default, get the parent directory of current directory
-# another path: "/home/seedbox/seedBoxFiles"
+# another path: "/home/seedbox/seedBoxFiles" or /tmp/seedbox
 seedboxFiles="$(dirname "$here")"
-
+mkdir -p $seedboxFiles
 
 
 #launch scripts
@@ -138,7 +138,10 @@ if [[ "$response" = "y" || "$response" = "Y" ]]; then
  fi
 fi
 
+
 # docker-compose up -d  --remove-orphans
 # docker restart seedboxdocker_front_1
 # stop & remove containers
 # docker-compose down --remove-orphans
+# docker-compose logs 
+# when using "buid: ../xxx" in docker-compose.yml, run: docker-compose build
