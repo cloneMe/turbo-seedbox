@@ -277,4 +277,291 @@ http://$(hostname -f)
 
 }
 
+function generateMuximuxConf {
+# see https://github.com/mescon/Muximux/blob/71f1bcaa43bfa4cc0900b221eccb9882b53da66b/css/font-muximux.css
+#local l=$(grep -n last_check $seedboxFiles/config/muximux/www/muximux/settings.ini.php | grep -Eo '^[^:]+' )
+
+head -n 23 $seedboxFiles/config/muximux/www/muximux/settings.ini.php-example > $tmpFolder/muximux_settings.ini.php
+if [ "$portainer" = "true" ]; then
+   echo "
+[Portainer]
+name = \"Portainer\"
+url = \"$httpMode://$server_name/portainer\"
+scale = 1
+icon = \"muximux-stack\"
+color = \"#6aa84f\"
+enabled = \"true\"
+dd = \"true\"
+" >> $tmpFolder/muximux_settings.ini.php
+fi
+if [ "$rtorrent" = "true" ]; then
+   echo "
+[rTorrent]
+name = \"rTorrent\"
+url = \"$httpMode://$server_name/rtorrent\"
+scale = 1
+icon = \"muximux-rutorrent\"
+color = \"#1a1bfe\"
+enabled = \"true\"
+
+" >> $tmpFolder/muximux_settings.ini.php
+fi
+if [ "$jackett" = "true" ]; then
+   echo "
+[Jackett]
+name = \"Jackett\"
+url = \"$httpMode://$server_name/jackett/\"
+scale = 1
+icon = \"muximux-jackett\"
+color = \"#3d85c6\"
+enabled = \"true\"
+
+" >> $tmpFolder/muximux_settings.ini.php
+fi
+if [ "$sickrage" = "true" ]; then
+   echo "
+[Sickrage]
+name = \"Sickrage\"
+url = \"$httpMode://$server_name/sickrage\"
+scale = 1
+icon = \"muximux-sickbeard\"
+color = \"#3d85c6\"
+enabled = \"true\"
+
+" >> $tmpFolder/muximux_settings.ini.php
+fi
+if [ "$couchpotato" = "true" ]; then
+   echo "
+[Couchpotato]
+name = \"CouchPotato\"
+url = \"$httpMode://$server_name/couchpotato\"
+scale = 1
+icon = \"muximux-couchpotato\"
+color = \"#f85c22\"
+enabled = \"true\"
+
+" >> $tmpFolder/muximux_settings.ini.php
+fi
+if [ "$radarr" = "true" ]; then
+   echo "
+[Radarr]
+name = \"Radarr\"
+url = \"$httpMode://$server_name/radarr\"
+scale = 1
+icon = \"muximux-sonarr\"
+color = \"#35c5f4\"
+enabled = \"true\"
+
+" >> $tmpFolder/muximux_settings.ini.php
+fi
+if [ "$mylar" = "true" ]; then
+   echo "
+[Mylar]
+name = \"Mylar\"
+url = \"$httpMode://$server_name/mylar\"
+scale = 1
+icon = \"muximux-book\"
+color = \"\"
+enabled = \"true\"
+
+" >> $tmpFolder/muximux_settings.ini.php
+fi
+
+if [ "$headphones" = "true" ]; then
+   echo "
+[Headphones]
+name = \"Headphones\"
+url = \"$httpMode://$server_name/headphones\"
+scale = 1
+icon = \"muximux-headphones\"
+color = \"#000000\"
+enabled = \"true\"
+
+" >> $tmpFolder/muximux_settings.ini.php
+fi
+if [ "$plex" = "true" ]; then
+   echo "
+[Plex]
+name = \"Plex\"
+url = \"$httpMode://$server_name/plex\"
+scale = 1
+icon = \"muximux-plex\"
+color = \"#f9be03\"
+enabled = \"true\"
+default = \"true\"
+
+" >> $tmpFolder/muximux_settings.ini.php
+fi
+if [ "$libresonic" = "true" ]; then
+   echo "
+[Libresonic]
+name = \"Libresonic\"
+url = \"$httpMode://$server_name/libresonic\"
+scale = 1
+icon = \"muximux-music\"
+color = \"#cc7b19\"
+enabled = \"true\"
+
+" >> $tmpFolder/muximux_settings.ini.php
+fi
+if [ "$ubooquity" = "true" ]; then
+   echo "
+[Ubooquity]
+name = \"Ubooquity\"
+url = \"$httpMode://$server_name/ubooquity\"
+scale = 1
+icon = \"muximux-books\"
+color = \"#3d6fae\"
+enabled = \"true\"
+
+" >> $tmpFolder/muximux_settings.ini.php
+fi
+if [ "$emby" = "true" ]; then
+   echo "
+[Emby]
+name = \"Emby\"
+url = \"$httpMode://$server_name/emby\"
+scale = 1
+icon = \"muximux-plex\"
+color = \"#f9be03\"
+enabled = \"true\"
+
+" >> $tmpFolder/muximux_settings.ini.php
+fi
+if [ "$limbomedia" = "true" ]; then
+   echo "
+[Limbomedia]
+name = \"Limbomedia\"
+url = \"$httpMode://$server_name/media\"
+scale = 1
+icon = \"muximux-plex\"
+color = \"#3d85c6\"
+enabled = \"true\"
+
+" >> $tmpFolder/muximux_settings.ini.php
+fi
+if [ "$cloud" = "true" ]; then
+   echo "
+[Cloud]
+name = \"Cloud\"
+url = \"$httpMode://$server_name/cloud\"
+scale = 1
+icon = \"muximux-cloud\"
+color = \"#3d85c6\"
+enabled = \"true\"
+
+" >> $tmpFolder/muximux_settings.ini.php
+fi
+if [ "$elfinder" = "true" ]; then
+   echo "
+[Elfinder]
+name = \"Elfinder\"
+url = \"$httpMode://$server_name/elfinder\"
+scale = 1
+icon = \"muximux-folder\"
+color = \"#3d85c6\"
+enabled = \"true\"
+
+" >> $tmpFolder/muximux_settings.ini.php
+fi
+if [ "$glances" = "true" ]; then
+   echo "
+[Glances]
+name = \"Glances\"
+url = \"$httpMode://$server_name/glances\"
+scale = 1
+icon = \"muximux-eye\"
+color = \"#59D16C\"
+enabled = \"true\"
+" >> $tmpFolder/muximux_settings.ini.php
+fi
+if [ "$plexpy" = "true" ]; then
+   echo "
+[PlexPy]
+name = \"PlexPy\"
+url = \"$httpMode://$server_name/plexpy\"
+scale = 1
+icon = \"muximux-plexivity\"
+color = \"#cc7b19\"
+enabled = \"true\"
+
+" >> $tmpFolder/muximux_settings.ini.php
+fi
+if [ "$syncthing" = "true" ]; then
+   echo "
+[Syncthing]
+name = \"Syncthing\"
+url = \"$httpMode://$server_name/syncthing\"
+scale = 1
+icon = \"muximux-sync\"
+color = \"#3d85c6\"
+enabled = \"true\"
+dd = \"true\"
+
+" >> $tmpFolder/muximux_settings.ini.php
+fi
+if [ "$pureftpd" = "true" ]; then
+   echo "
+[FTP]
+name = \"FTP\"
+url = \"ftp://$server_name\"
+scale = 1
+icon = \"muximux-folder2\"
+color = \"#3d85c6\"
+enabled = \"true\"
+
+" >> $tmpFolder/muximux_settings.ini.php
+fi
+if [ "$explorer" = "true" ]; then
+   echo "
+[Explorer]
+name = \"Explorer\"
+url = \"$httpMode://explorer.$server_name\"
+scale = 1
+icon = \"muximux-folder\"
+color = \"#3d85c6\"
+enabled = \"true\"
+
+" >> $tmpFolder/muximux_settings.ini.php
+fi
+if [ "$filemanager" = "true" ]; then
+   echo "
+[FileManager]
+name = \"File manager\"
+url = \"$httpMode://files.$server_name\"
+scale = 1
+icon = \"muximux-folder\"
+color = \"#3d85c6\"
+enabled = \"true\"
+
+" >> $tmpFolder/muximux_settings.ini.php
+fi
+if [ "$butterfly" = "true" ]; then
+   echo "
+[Butterfly]
+name = \"Web console\"
+url = \"$httpMode://$server_name/butterfly\"
+scale = 1
+icon = \"muximux-sync\"
+color = \"#3d85c6\"
+enabled = \"true\"
+
+" >> $tmpFolder/muximux_settings.ini.php
+fi
+
+if [ false ]; then
+echo "
+[Hosting]
+name = \"Hosting info\"
+url = \"http://$(hostname -f)\"
+scale = 1
+icon = \"muximux-info\"
+color = \"#3d85c6\"
+enabled = \"true\"
+
+" >> $tmpFolder/muximux_settings.ini.php
+fi
+
+}
+
 
