@@ -97,6 +97,9 @@ In Settings > Searcher, activate TorrentPotato and put following values:
    Leave the username field blank.
 And Check the combo box ! (otherwise it will not work )
 
+In Settings > Categories, add in the ignore list:
+HC,HDTS,.MD.,-MD-,_MD_,DVD9
+
 -- Plex
 Issue : Plex NEVER asks for authentication. Everybody can access to it :/
 nano $seedboxFiles/config/plex/Library/Application\ Support/Plex\ Media\ Server/Preferences.xml
