@@ -32,7 +32,7 @@ docker run -i --rm \
     -v $tmpFolder/letsencrypt:/etc/letsencrypt \
     -p 80:80 -p 443:443 \
     xataz/letsencrypt \
-        certonly --non-interactive --renew-by-default --standalone --standalone-supported-challenges tls-sni-01 --rsa-key-size 4096 --email $EMAIL --agree-tos -d $URL $SUBDOMAINS2
+        certonly --standalone --rsa-key-size 4096 --email $EMAIL --agree-tos -d $URL $SUBDOMAINS2
 # ex: $tmpFolder/letsencrypt/live/$URL-001/*
 cp $tmpFolder/letsencrypt/live/$URL*/* $sslFolder
 echo "Restarting web server"
