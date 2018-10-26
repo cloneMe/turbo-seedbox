@@ -26,13 +26,16 @@ fi
 . $tmpFolder/letsencrypt/config/donoteditthisfile.conf
 #use quotes to fix:
 #include/https.sh: line 29: [: files,rtorrent,sickrage,couchpotato,plex,explorer: unary operator expected
+
 if [ ! "$URL" = "$ORIGURL" ] || [ ! "$SUBDOMAINS" = "$ORIGSUBDOMAINS" ]; then
+  if [ -d $tmpFolder/letsencrypt/$URL ]; then
   echo "Different sub/domains entered than what was used before. Revoking and deleting existing certificate, and an updated one will be created"
   docker run -it --rm \
     -v $tmpFolder/letsencrypt:/etc/letsencrypt \
     -p 8080:80 -p 8443:443 \
     xataz/letsencrypt \
         revoke --non-interactive --cert-path /etc/letsencrypt/live/$URL/fullchain.pem
+  fi
   rm -rf $tmpFolder/letsencrypt/live/$URL
   rm -rf /ssl/*.pem
   echo -e "ORIGURL=\"$URL\" ORIGSUBDOMAINS=\"$SUBDOMAINS\"" > $tmpFolder/letsencrypt/config/donoteditthisfile.conf
@@ -45,7 +48,7 @@ crontab $tmpFolder/letsencryptcron.conf
 if [[ ! -f ssl/dhparams.pem ]]; then
    openssl dhparam -out ssl/dhparams.pem 4096 &
 fi
-
+# todo: call letsencrypt.sh $tmpFolder $here2/ssl/
 }
 
 function self ()
