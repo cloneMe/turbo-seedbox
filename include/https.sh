@@ -48,7 +48,8 @@ crontab $tmpFolder/letsencryptcron.conf
 if [[ ! -f ssl/dhparams.pem ]]; then
    openssl dhparam -out ssl/dhparams.pem 4096 &
 fi
-# todo: call letsencrypt.sh $tmpFolder $here2/ssl/
+# generate the certificate
+$here/$INCLUDE/letsencrypt.sh $tmpFolder $here2/ssl/
 }
 
 function self ()
