@@ -8,11 +8,13 @@ fi
 
 echo "cronjob running at "$(date)
 
-docker pull linuxserver/jackett
-
-
-docker stop jackett
-docker rm jackett
 
 cd $1
+
+# Update all images:
+docker-compose pull
+# Let compose update all containers as necessary
 docker-compose up -d
+
+# WARNING! This will remove all dangling images.
+docker image prune -f
