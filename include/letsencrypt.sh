@@ -31,8 +31,8 @@ echo "Generating/Renewing certificate"
 docker run -i --rm \
     -v $tmpFolder/letsencrypt:/etc/letsencrypt \
     -p 80:80 -p 443:443 \
-    xataz/letsencrypt \
-        certonly --standalone --rsa-key-size 4096 --email $EMAIL --agree-tos -d $URL $SUBDOMAINS2
+    certbot/certbot \
+        certonly --standalone --server https://acme-v02.api.letsencrypt.org/directory --rsa-key-size 4096 --email $EMAIL --agree-tos -d $URL $SUBDOMAINS2
 # ex: $tmpFolder/letsencrypt/live/$URL-001/*
 cp $tmpFolder/letsencrypt/live/$URL*/* $sslFolder
 echo "Restarting web server"
